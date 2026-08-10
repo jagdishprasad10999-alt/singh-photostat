@@ -35,23 +35,26 @@
 </div>
 <script type="module">
 
+
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
     getAuth,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    setPersistence,
+    browserLocalPersistence
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDbPCgkkkdmLYzgmZnE2JequK6x4Ro8y5k",
-  authDomain: "singh-photostat.firebaseapp.com",
-  projectId: "singh-photostat",
-  storageBucket: "singh-photostat.firebasestorage.app",
-  messagingSenderId: "366679751413",
-  appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+    apiKey: "AIzaSyDbPCgkkdmLYzgmZnE2JequK6x4Ro8y5k",
+    authDomain: "singh-photostat.firebaseapp.com",
+    projectId: "singh-photostat",
+    storageBucket: "singh-photostat.firebasestorage.app",
+    messagingSenderId: "366679751413",
+    appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
 };
 
 
@@ -69,11 +72,17 @@ window.login = function () {
         document.getElementById("password").value;
 
 
-    signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-    )
+    setPersistence(auth, browserLocalPersistence)
+
+    .then(() => {
+
+        return signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
+
+    })
 
     .then(() => {
 
@@ -90,6 +99,8 @@ window.login = function () {
     });
 
 };
+
+</script>
 
 </script>
 
