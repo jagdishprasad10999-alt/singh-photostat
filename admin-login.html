@@ -10,30 +10,88 @@
 </head>
 
 <body>
+<h1>Admin Login</h1>
 
-    <h1>Admin Login</h1>
+<div class="card">
 
-    <div class="card">
+    <h3>Singh Photostat & Janseva Kendra</h3>
 
-        <h3>Singh Photostat & Janseva Kendra</h3>
+    <label>Email:</label>
+    <br>
+    <input type="email" id="email">
 
-        <label>Username:</label>
-        <br>
-        <input type="text" id="username">
+    <br><br>
 
-        <br><br>
+    <label>Password:</label>
+    <br>
+    <input type="password" id="password">
 
-        <label>Password:</label>
-        <br>
-        <input type="password" id="password">
+    <br><br>
 
-        <br><br>
+    <button onclick="login()">
+        Login
+    </button>
 
-        <button onclick="login()">
-            Login
-        </button>
+</div>
+<script type="module">
 
-    </div>
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDbPCgkkkdmLYzgmZnE2JequK6x4Ro8y5k",
+  authDomain: "singh-photostat.firebaseapp.com",
+  projectId: "singh-photostat",
+  storageBucket: "singh-photostat.firebasestorage.app",
+  messagingSenderId: "366679751413",
+  appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+window.login = function () {
+
+    const email =
+        document.getElementById("email").value;
+
+    const password =
+        document.getElementById("password").value;
+
+
+    signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+    )
+
+    .then(() => {
+
+        alert("Login Successful");
+
+        window.location.href = "admin.html";
+
+    })
+
+    .catch((error) => {
+
+        alert("Login Failed: " + error.message);
+
+    });
+
+};
+
+</script>
 
 
 <script>
