@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body style="display:none;">
 
 <h1>Product Admin Panel</h1>
 
@@ -104,13 +104,13 @@ onAuthStateChanged(auth, function(user) {
 
         console.log("Admin logged in:", user.email);
 
+        document.body.style.display = "block";
+
         showProducts();
 
     } else {
 
-        alert("Please login as Admin first.");
-
-        window.location.href = "admin-login.html";
+        window.location.replace("admin-login.html");
 
     }
 
