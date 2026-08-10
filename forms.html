@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Forms - Singh Photostat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>नए ऑनलाइन फॉर्म और अपडेट</h1>
+
+<div class="card">
+
+<h3>प्रधानमंत्री किसान योजना</h3>
+
+<p>आवेदन की जानकारी उपलब्ध है।</p>
+
+<p>सरकारी फीस: जानकारी के अनुसार</p>
+
+<p>फॉर्म भरने का चार्ज: ₹50</p>
+
+</div>
+<div class="card">
+
+<h3>आय प्रमाण पत्र आवेदन</h3>
+
+<p>ऑनलाइन आवेदन सुविधा उपलब्ध है।</p>
+
+<p>सरकारी फीस: ₹30</p>
+
+<p>फॉर्म भरने का चार्ज: ₹50</p>
+
+</div>
+<div class="card">
+
+<h3>जाति प्रमाण पत्र आवेदन</h3>
+
+<p>नया ऑनलाइन आवेदन किया जा सकता है।</p>
+
+<p>सरकारी फीस: ₹30</p>
+
+<p>फॉर्म भरने का चार्ज: ₹50</p>
+
+</div>
+<script>
+
+let forms = JSON.parse(localStorage.getItem("forms")) || [];
+
+forms.forEach(function(form){
+
+document.body.innerHTML += `
+
+<div class="card">
+
+<h3>${form.name}</h3>
+
+<p>अंतिम तारीख: ${form.date}</p>
+
+<p>सरकारी फीस: ${form.govtFee}</p>
+
+<p>फॉर्म भरने का चार्ज: ${form.serviceFee}</p>
+
+</div>
+
+`;
+
+});
+</script>
+
+</body>
+</html>

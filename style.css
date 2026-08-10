@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f6ff;
+    margin: 20px;
+}
+
+h1 {
+    color: blue;
+    text-align: center;
+}
+
+h2 {
+    color: green;
+}
+
+li {
+    font-size: 18px;
+    margin: 10px;
+}
+header {
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+section {
+    margin-top: 30px;
+}
+
+.services {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: white;
+    width: 250px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px gray;
+}
+
+.card h3 {
+    color: blue;
+}
+
+.card p {
+    font-size: 16px;
+}
+img {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+nav {
+    text-align: center;
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    margin: 15px;
+    color: blue;
+    font-size: 18px;
+}

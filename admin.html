@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel - Singh Photostat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Admin Panel</h1>
+
+<div class="card">
+
+<h3>नया फॉर्म जोड़ें</h3>
+
+<label>फॉर्म का नाम:</label>
+<br>
+<input type="text">
+
+<br><br>
+
+<label>अंतिम तारीख:</label>
+<br>
+<input type="text">
+
+<br><br>
+
+<label>सरकारी फीस:</label>
+<br>
+<input type="text">
+
+<br><br>
+
+<label>फीस:</label>
+<br>
+<input type="text">
+
+<br><br>
+
+<button onclick="saveForm()">
+Save Form
+</button>
+
+<h2>Added Forms</h2>
+
+<div id="formList"></div>
+</div>
+<script>
+
+function saveForm(){
+
+let inputs = document.querySelectorAll("input");
+
+let newForm = {
+    name: inputs[0].value,
+    date: inputs[1].value,
+    govtFee: inputs[2].value,
+    serviceFee: inputs[3].value
+};
+
+
+let forms = JSON.parse(localStorage.getItem("forms")) || [];
+
+
+forms.push(newForm);
+
+
+localStorage.setItem("forms", JSON.stringify(forms));
+
+
+alert("Form Added Successfully");
+
+}
+function showForms(){
+
+let forms = JSON.parse(localStorage.getItem("forms")) || [];
+
+let list = document.getElementById("formList");
+
+list.innerHTML = "";
+
+forms.forEach(function(form,index){
+
+list.innerHTML += `
+
+<div class="card">
+
+<h3>${form.name}</h3>
+
+<p>${form.date}</p>
+
+<button onclick="editForm(${index})">
+Edit
+</button>
+
+<button onclick="deleteForm(${index})">
+Delete
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+function deleteForm(index){
+
+let forms = JSON.parse(localStorage.getItem("forms")) || [];
+
+forms.splice(index,1);
+
+localStorage.setItem("forms",JSON.stringify(forms));
+
+showForms();
+
+}
+
+showForms();
+
+function editForm(index){
+
+let forms = JSON.parse(localStorage.getItem("forms")) || [];
+
+let form = forms[index];
+
+
+let name = prompt("Form Name", form.name);
+
+let date = prompt("Last Date", form.date);
+
+let govtFee = prompt("Government Fee", form.govtFee);
+
+let serviceFee = prompt("Service Charge", form.serviceFee);
+
+
+forms[index] = {
+
+name:name,
+date:date,
+govtFee:govtFee,
+serviceFee:serviceFee
+
+};
+
+
+localStorage.setItem("forms", JSON.stringify(forms));
+
+
+showForms();
+
+}
+</script>
+</body>
+</html>

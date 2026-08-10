@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Product Admin - Singh Photostat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Product Admin Panel</h1>
+
+<div class="card">
+
+<h3>नया Product जोड़ें</h3>
+
+<label>Product Name:</label>
+<br>
+<input type="text" id="productName">
+
+<br><br>
+
+<label>Price:</label>
+<br>
+<input type="text" id="productPrice">
+
+<br><br>
+
+<label>Description:</label>
+<br>
+<input type="text" id="productDescription">
+<br><br>
+
+<label>Product Image:</label>
+<br>
+<input type="file" id="productImage" accept="image/*">
+
+
+
+<br><br>
+
+<button onclick="saveProduct()">
+Save Product
+</button>
+<h2>Added Products</h2>
+
+<div id="productList"></div>
+</div>
+
+
+<script>
+
+function saveProduct(){
+
+    let name = document.getElementById("productName").value;
+
+    let price = document.getElementById("productPrice").value;
+
+    let description = document.getElementById("productDescription").value;
+
+    let imageFile = document.getElementById("productImage").files[0];
+
+
+    if(!imageFile){
+
+        alert("Please select a product image");
+
+        return;
+
+    }
+
+
+    let reader = new FileReader();
+
+
+    reader.onload = function(){
+
+        let product = {
+
+            name: name,
+
+            price: price,
+
+            description: description,
+
+            image: reader.result
+
+        };
+
+
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+
+
+        products.push(product);
+
+
+        localStorage.setItem("products", JSON.stringify(products));
+
+
+        alert("Product Saved Successfully");
+
+        showProducts();
+
+    };
+
+
+    reader.readAsDataURL(imageFile);
+
+}
+
+
+function showProducts(){
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+let list = document.getElementById("productList");
+
+list.innerHTML = "";
+
+products.forEach(function(product,index){
+
+list.innerHTML += `
+
+<div class="card">
+
+<h3>${product.name}</h3>
+
+<p>Price: ₹${product.price}</p>
+
+<p>${product.description}</p>
+
+<img src="${product.image}" width="150">
+
+<button onclick="editProduct(${index})">
+Edit
+</button>
+
+<button onclick="deleteProduct(${index})">
+Delete
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+function deleteProduct(index){
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+products.splice(index,1);
+
+localStorage.setItem("products",JSON.stringify(products));
+
+showProducts();
+
+}
+function editProduct(index){
+
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+let product = products[index];
+
+
+let name = prompt("Product Name", product.name);
+
+let price = prompt("Price", product.price);
+
+let description = prompt("Description", product.description);
+
+
+products[index] = {
+
+name:name,
+price:price,
+description:description
+
+};
+
+
+localStorage.setItem("products", JSON.stringify(products));
+
+
+showProducts();
+
+}
+showProducts();
+
+</script>
+
+
+</body>
+
+</html>

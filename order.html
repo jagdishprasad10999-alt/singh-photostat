@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order - Singh Photostat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>ऑनलाइन ऑर्डर</h1>
+
+    <div class="card">
+
+        <label>आपका नाम:</label>
+        <br>
+        <input type="text" id="customerName" placeholder="अपना नाम लिखें">
+
+        <br><br>
+
+        <label>मोबाइल नंबर:</label>
+        <br>
+        <input type="tel" id="customerMobile" placeholder="मोबाइल नंबर">
+
+        <br><br>
+
+        <label>Product:</label>
+        <br>
+        <input type="text" id="productName" readonly>
+
+        <br><br>
+
+        <label>Price:</label>
+        <br>
+        <input type="text" id="productPrice" readonly>
+
+        <br><br>
+
+        <label>Quantity:</label>
+        <br>
+        <input type="number" id="quantity" value="1" min="1"
+               onchange="calculateTotal()">
+
+        <br><br>
+
+        <h3>
+            Total: ₹<span id="totalPrice">0</span>
+        </h3>
+
+        <button onclick="placeOrder()">
+            WhatsApp पर Order करें
+        </button>
+
+    </div>
+
+
+<script>
+
+let params = new URLSearchParams(window.location.search);
+
+let product = params.get("product");
+let price = params.get("price");
+
+document.getElementById("productName").value = product || "";
+document.getElementById("productPrice").value = price || "";
+
+calculateTotal();
+
+
+function calculateTotal(){
+
+    let price = Number(document.getElementById("productPrice").value) || 0;
+
+    let quantity = Number(document.getElementById("quantity").value) || 1;
+
+    let total = price * quantity;
+
+    document.getElementById("totalPrice").innerText = total;
+
+}
+
+
+function placeOrder(){
+
+    let name = document.getElementById("customerName").value;
+    let mobile = document.getElementById("customerMobile").value;
+    let product = document.getElementById("productName").value;
+    let price = document.getElementById("productPrice").value;
+    let quantity = document.getElementById("quantity").value;
+    let total = document.getElementById("totalPrice").innerText;
+
+
+    if(name === "" || mobile === ""){
+
+        alert("कृपया अपना नाम और मोबाइल नंबर भरें।");
+
+        return;
+
+    }
+
+
+    let message =
+    "नया Order%0A%0A" +
+    "नाम: " + name + "%0A" +
+    "मोबाइल: " + mobile + "%0A" +
+    "Product: " + product + "%0A" +
+    "Price: ₹" + price + "%0A" +
+    "Quantity: " + quantity + "%0A" +
+    "Total: ₹" + total;
+
+
+    let whatsappNumber = "918650515172";
+
+    window.open(
+        "https://wa.me/" + whatsappNumber + "?text=" + message,
+        "_blank"
+    );
+
+}
+
+</script>
+
+</body>
+
+</html>
