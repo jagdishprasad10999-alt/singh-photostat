@@ -54,135 +54,87 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    updateDoc,
-    deleteDoc,
-    doc
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-import {
     getAuth,
     onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    doc,
+    updateDoc,
+    serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDbPCgkkdmLYzgmZnE2JequK6x4Ro8y5k",
+
+    apiKey: "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
+
     authDomain: "singh-photostat.firebaseapp.com",
+
     projectId: "singh-photostat",
+
     storageBucket: "singh-photostat.firebasestorage.app",
+
     messagingSenderId: "366679751413",
+
     appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+
 };
 
 
 const app = initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
-
 const auth = getAuth(app);
 
+const db = getFirestore(app);
 
-let currentUser = null;
 
+/* CHECK ADMIN LOGIN */
 
-// Check Admin Login
-onAuthStateChanged(auth, function(user){
+onAuthStateChanged(auth, function(user) {
 
-    if(!user){
+    if (user) {
+
+        console.log("Admin logged in:", user.email);
+
+        showProducts();
+
+    } else {
 
         alert("Please login as Admin first.");
 
         window.location.href = "admin-login.html";
 
-        return;
-
     }
-
-    currentUser = user;
-
-    showProducts();
 
 });
 
 
-// Compress Image
-function compressImage(file){
+/* SAVE PRODUCT */
 
-    return new Promise(function(resolve){
+window.saveProduct = async function() {
 
-        let reader = new FileReader();
-
-        reader.onload = function(event){
-
-            let img = new Image();
-
-            img.onload = function(){
-
-                let canvas = document.createElement("canvas");
-
-                let maxWidth = 500;
-
-                let scale = Math.min(
-                    maxWidth / img.width,
-                    maxWidth / img.height,
-                    1
-                );
-
-                canvas.width = img.width * scale;
-
-                canvas.height = img.height * scale;
-
-                let ctx = canvas.getContext("2d");
-
-                ctx.drawImage(
-                    img,
-                    0,
-                    0,
-                    canvas.width,
-                    canvas.height
-                );
-
-                let compressedImage =
-                    canvas.toDataURL("image/jpeg", 0.6);
-
-                resolve(compressedImage);
-
-            };
-
-            img.src = event.target.result;
-
-        };
-
-        reader.readAsDataURL(file);
-
-    });
-
-}
-
-
-// Save Product
-window.saveProduct = async function(){
-
-    let name =
+    const name =
         document.getElementById("productName").value.trim();
 
-    let price =
+    const price =
         document.getElementById("productPrice").value.trim();
 
-    let description =
+    const description =
         document.getElementById("productDescription").value.trim();
 
-    let imageFile =
+    const imageFile =
         document.getElementById("productImage").files[0];
 
 
-    if(!name || !price || !description){
+    if (!name || !price || !description) {
 
         alert("Please fill all product details.");
 
@@ -191,28 +143,67 @@ window.saveProduct = async function(){
     }
 
 
-    if(!imageFile){
+    let imageData = "no-image";
 
-        alert("Please select a product image.");
 
-        return;
+    if (imageFile) {
+
+        const reader = new FileReader();
+
+        reader.onload = async function() {
+
+            imageData = reader.result;
+
+            await addProductToFirestore(
+                name,
+                price,
+                description,
+                imageData
+            );
+
+        };
+
+        reader.readAsDataURL(imageFile);
+
+    } else {
+
+        await addProductToFirestore(
+            name,
+            price,
+            description,
+            imageData
+        );
 
     }
 
+};
 
-    try{
 
-        let image = await compressImage(imageFile);
+/* ADD PRODUCT TO FIRESTORE */
 
+async function addProductToFirestore(
+    name,
+    price,
+    description,
+    image
+) {
+
+    try {
 
         await addDoc(
             collection(db, "products"),
             {
+
                 name: name,
+
                 price: Number(price),
+
                 description: description,
+
                 image: image,
-                createdAt: new Date()
+
+                createdAt: serverTimestamp()
+
             }
         );
 
@@ -231,42 +222,65 @@ window.saveProduct = async function(){
 
         showProducts();
 
-    }
-    catch(error){
+
+    } catch (error) {
 
         console.error(error);
 
-        alert("Product Save Failed: " + error.message);
+        alert("Product save failed: " + error.message);
 
     }
 
-};
+}
 
 
-// Show Products
-window.showProducts = async function(){
+/* SHOW PRODUCTS */
 
-    let list =
+async function showProducts() {
+
+    const list =
         document.getElementById("productList");
 
-    list.innerHTML = "Loading Products...";
+
+    if (!list) {
+
+        console.error("productList not found");
+
+        return;
+
+    }
 
 
-    try{
+    list.innerHTML = "<p>Loading products...</p>";
 
-        let querySnapshot =
-            await getDocs(collection(db, "products"));
+
+    try {
+
+        const querySnapshot =
+            await getDocs(
+                collection(db, "products")
+            );
 
 
         list.innerHTML = "";
 
 
-        querySnapshot.forEach(function(documentSnapshot){
+        if (querySnapshot.empty) {
 
-            let product =
+            list.innerHTML =
+                "<p>No products added yet.</p>";
+
+            return;
+
+        }
+
+
+        querySnapshot.forEach(function(documentSnapshot) {
+
+            const product =
                 documentSnapshot.data();
 
-            let id =
+            const id =
                 documentSnapshot.id;
 
 
@@ -276,25 +290,41 @@ window.showProducts = async function(){
 
                     <h3>${product.name}</h3>
 
-                    <p>Price: ₹${product.price}</p>
+                    <p>
+                        Price: ₹${product.price}
+                    </p>
 
-                    <p>${product.description}</p>
+                    <p>
+                        ${product.description}
+                    </p>
 
                     ${
-                        product.image
+                        product.image &&
+                        product.image !== "no-image"
+
                         ?
-                        `<img src="${product.image}" width="150">`
+
+                        `<img
+                            src="${product.image}"
+                            width="150"
+                        >`
+
                         :
-                        ""
+
+                        `<p>No image</p>`
                     }
+
 
                     <br><br>
 
-                    <button onclick="editProduct('${id}')">
+                    <button
+                        onclick="editProduct('${id}')">
                         Edit
                     </button>
 
-                    <button onclick="deleteProduct('${id}')">
+
+                    <button
+                        onclick="deleteProduct('${id}')">
                         Delete
                     </button>
 
@@ -305,40 +335,35 @@ window.showProducts = async function(){
         });
 
 
-        if(list.innerHTML === ""){
-
-            list.innerHTML = "No products added yet.";
-
-        }
-
-    }
-    catch(error){
+    } catch (error) {
 
         console.error(error);
 
         list.innerHTML =
-            "Products load failed: " + error.message;
+            "<p>Products load failed.</p>";
+
+        alert(
+            "Products load failed: "
+            + error.message
+        );
 
     }
 
-};
+}
 
 
-// Delete Product
-window.deleteProduct = async function(id){
+/* DELETE PRODUCT */
 
-    let confirmDelete =
-        confirm("Are you sure you want to delete this product?");
+window.deleteProduct = async function(id) {
 
-
-    if(!confirmDelete){
+    if (!confirm("Delete this product?")) {
 
         return;
 
     }
 
 
-    try{
+    try {
 
         await deleteDoc(
             doc(db, "products", id)
@@ -349,93 +374,55 @@ window.deleteProduct = async function(id){
 
         showProducts();
 
-    }
-    catch(error){
+
+    } catch (error) {
 
         console.error(error);
 
-        alert("Delete Failed: " + error.message);
+        alert(
+            "Delete failed: "
+            + error.message
+        );
 
     }
 
 };
 
 
-// Edit Product
-window.editProduct = async function(id){
+/* EDIT PRODUCT */
 
-    try{
+window.editProduct = async function(id) {
 
-        let productDoc =
-            doc(db, "products", id);
+    try {
 
-        let querySnapshot =
-            await getDocs(collection(db, "products"));
+        const newName =
+            prompt("Enter new Product Name:");
 
-
-        let product = null;
+        if (!newName) return;
 
 
-        querySnapshot.forEach(function(documentSnapshot){
+        const newPrice =
+            prompt("Enter new Price:");
 
-            if(documentSnapshot.id === id){
-
-                product =
-                    documentSnapshot.data();
-
-            }
-
-        });
+        if (!newPrice) return;
 
 
-        if(!product){
+        const newDescription =
+            prompt("Enter new Description:");
 
-            alert("Product not found.");
-
-            return;
-
-        }
-
-
-        let name =
-            prompt("Product Name", product.name);
-
-        if(name === null){
-
-            return;
-
-        }
-
-
-        let price =
-            prompt("Price", product.price);
-
-        if(price === null){
-
-            return;
-
-        }
-
-
-        let description =
-            prompt(
-                "Description",
-                product.description
-            );
-
-        if(description === null){
-
-            return;
-
-        }
+        if (!newDescription) return;
 
 
         await updateDoc(
-            productDoc,
+            doc(db, "products", id),
             {
-                name: name,
-                price: Number(price),
-                description: description
+
+                name: newName,
+
+                price: Number(newPrice),
+
+                description: newDescription
+
             }
         );
 
@@ -444,12 +431,15 @@ window.editProduct = async function(id){
 
         showProducts();
 
-    }
-    catch(error){
+
+    } catch (error) {
 
         console.error(error);
 
-        alert("Edit Failed: " + error.message);
+        alert(
+            "Update failed: "
+            + error.message
+        );
 
     }
 
