@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body style="display:none;">
 
 <h1>Admin Panel</h1>
 
@@ -159,6 +159,58 @@ localStorage.setItem("forms", JSON.stringify(forms));
 showForms();
 
 }
+</script>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+    getAuth,
+    onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
+
+    authDomain: "singh-photostat.firebaseapp.com",
+
+    projectId: "singh-photostat",
+
+    storageBucket: "singh-photostat.firebasestorage.app",
+
+    messagingSenderId: "366679751413",
+
+    appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+onAuthStateChanged(auth, function(user) {
+
+    if (user) {
+
+        console.log("Admin logged in:", user.email);
+
+        document.body.style.display = "block";
+
+    } else {
+
+        window.location.replace("admin-login.html");
+
+    }
+
+});
+
 </script>
 </body>
 </html>
