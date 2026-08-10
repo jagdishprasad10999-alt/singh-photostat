@@ -9,125 +9,134 @@
 
 </head>
 
+
 <body>
-<h1>Admin Login</h1>
 
-<div class="card">
+    <h1>Admin Login</h1>
 
-    <h3>Singh Photostat & Janseva Kendra</h3>
+    <div class="card">
 
-    <label>Email:</label>
-    <br>
-    <input type="email" id="email">
+        <h3>Singh Photostat & Janseva Kendra</h3>
 
-    <br><br>
+        <label>Email:</label>
+        <br>
 
-    <label>Password:</label>
-    <br>
-    <input type="password" id="password">
+        <input type="email" id="email">
 
-    <br><br>
+        <br><br>
 
-    <button onclick="login()">
-        Login
-    </button>
+        <label>Password:</label>
+        <br>
 
-</div>
-<script type="module">
+        <input type="password" id="password">
 
+        <br><br>
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        <button id="loginButton">
+            Login
+        </button>
 
-import {
-    getAuth,
-    signInWithEmailAndPassword,
-    setPersistence,
-    browserLocalPersistence
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    </div>
 
 
-const firebaseConfig = {
-    apiKey: "AIzaSyDbPCgkkdmLYzgmZnE2JequK6x4Ro8y5k",
-    authDomain: "singh-photostat.firebaseapp.com",
-    projectId: "singh-photostat",
-    storageBucket: "singh-photostat.firebasestorage.app",
-    messagingSenderId: "366679751413",
-    appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
-};
+    <script type="module">
+
+        import { initializeApp }
+        from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
-const app = initializeApp(firebaseConfig);
-
-const auth = getAuth(app);
-
-
-window.login = function () {
-
-    const email =
-        document.getElementById("email").value;
-
-    const password =
-        document.getElementById("password").value;
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            setPersistence,
+            browserLocalPersistence
+        }
+        from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
-    setPersistence(auth, browserLocalPersistence)
+        const firebaseConfig = {
 
-    .then(() => {
+            apiKey: "AIzaSyDbPCGkkkdmLYzgmZnE2JequK6x4Ro8y5k",
 
-        return signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
+            authDomain: "singh-photostat.firebaseapp.com",
 
-    })
+            projectId: "singh-photostat",
 
-    .then(() => {
+            storageBucket: "singh-photostat.firebasestorage.app",
 
-        alert("Login Successful");
+            messagingSenderId: "366679751413",
 
-        window.location.href = "admin.html";
+            appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
 
-    })
-
-    .catch((error) => {
-
-        alert("Login Failed: " + error.message);
-
-    });
-
-};
-
-</script>
-
-</script>
+        };
 
 
-<script>
+        const app = initializeApp(firebaseConfig);
 
-function login(){
-
-    let username = document.getElementById("username").value;
-
-    let password = document.getElementById("password").value;
+        const auth = getAuth(app);
 
 
-    if(username === "admin" && password === "1234"){
+        document.getElementById("loginButton")
+        .addEventListener("click", function () {
 
-        window.location.href = "admin.html";
 
-    }
-    else{
+            const email =
+                document.getElementById("email").value.trim();
 
-        alert("Wrong Username or Password");
 
-    }
+            const password =
+                document.getElementById("password").value;
 
-}
 
-</script>
+            if (!email || !password) {
+
+                alert("Please enter Email and Password.");
+
+                return;
+
+            }
+
+
+            setPersistence(
+                auth,
+                browserLocalPersistence
+            )
+
+            .then(function () {
+
+                return signInWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
+                );
+
+            })
+
+            .then(function () {
+
+                alert("Login Successful");
+
+                window.location.href = "admin.html";
+
+            })
+
+            .catch(function (error) {
+
+                console.error(error);
+
+                alert(
+                    "Login Failed: " +
+                    error.code +
+                    "\n" +
+                    error.message
+                );
+
+            });
+
+        });
+
+    </script>
+
 
 </body>
 
