@@ -41,33 +41,103 @@ Order on WhatsApp
 
 </div>
 
-<script>
+<script type="module">
 
-let products = JSON.parse(localStorage.getItem("products")) || [];
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-products.forEach(function(product){
+import {
+    getFirestore,
+    collection,
+    getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-document.body.innerHTML += `
 
-<div class="card">
+const firebaseConfig = {
 
-<h3>${product.name}</h3>
+    apiKey: "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
 
-<p>${product.description}</p>
+    authDomain: "singh-photostat.firebaseapp.com",
 
-<img src="${product.image}" width="200">
+    projectId: "singh-photostat",
 
-<p>Price: ₹${product.price}</p>
+    storageBucket: "singh-photostat.firebasestorage.app",
 
-<a href="order.html?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}">
-Order Now
-</a>
+    messagingSenderId: "366679751413",
 
-</div>
+    appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
 
-`;
+};
 
-});
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+async function loadProducts() {
+
+    try {
+
+        const querySnapshot =
+            await getDocs(
+                collection(db, "products")
+            );
+
+
+        querySnapshot.forEach(function(documentSnapshot) {
+
+            const product =
+                documentSnapshot.data();
+
+
+            const productCard = document.createElement("div");
+
+            productCard.className = "card";
+
+
+            productCard.innerHTML = `
+
+                <h3>${product.name}</h3>
+
+                <p>${product.description}</p>
+
+                <p>
+                    <strong>Price: ₹${product.price}</strong>
+                </p>
+
+                <a
+                    href="https://wa.me/918650515172?text=${encodeURIComponent(
+                        "मुझे " + product.name + " चाहिए।"
+                    )}"
+                    target="_blank">
+
+                    Order on WhatsApp
+
+                </a>
+
+            `;
+
+
+            document.body.appendChild(productCard);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Products load failed:",
+            error
+        );
+
+    }
+
+}
+
+
+loadProducts();
 
 </script>
 </body>
