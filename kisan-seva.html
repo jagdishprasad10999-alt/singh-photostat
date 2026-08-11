@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>किसान सेवाएँ - Singh Photostat</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .service-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .service-table th,
+        .service-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .service-table th {
+            background: #f2f2f2;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <h1>किसान सेवाएँ</h1>
+
+
+    <div class="card">
+
+        <p>
+            किसानों के लिए ऑनलाइन आवेदन,
+            सरकारी योजनाओं और अन्य किसान सेवाओं की सुविधा।
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>सेवा शुल्क</h2>
+
+        <div id="serviceList">
+
+            <p>जानकारी लोड हो रही है...</p>
+
+        </div>
+
+    </div>
+
+
+
+<script type="module">
+
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+
+import {
+
+    getFirestore,
+    collection,
+    getDocs
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
+
+    authDomain:
+        "singh-photostat.firebaseapp.com",
+
+    projectId:
+        "singh-photostat",
+
+    storageBucket:
+        "singh-photostat.firebasestorage.app",
+
+    messagingSenderId:
+        "366679751413",
+
+    appId:
+        "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+
+};
+
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const db =
+    getFirestore(app);
+
+
+
+async function loadServiceItems() {
+
+
+    const list =
+        document.getElementById("serviceList");
+
+
+    try {
+
+
+        const querySnapshot =
+            await getDocs(
+
+                collection(
+                    db,
+                    "services",
+                    "kisanSeva",
+                    "items"
+                )
+
+            );
+
+
+        if (querySnapshot.empty) {
+
+            list.innerHTML =
+                "<p>अभी कोई सेवा उपलब्ध नहीं है।</p>";
+
+            return;
+
+        }
+
+
+        let html = `
+
+            <table class="service-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Sr. No.</th>
+
+                        <th>Description</th>
+
+                        <th>Price</th>
+
+                        <th>Remark</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+        `;
+
+
+        let srNo = 1;
+
+
+        querySnapshot.forEach(
+
+            function(documentSnapshot) {
+
+
+                const item =
+                    documentSnapshot.data();
+
+
+                html += `
+
+                    <tr>
+
+                        <td>${srNo}</td>
+
+                        <td>
+                            ${item.description || "-"}
+                        </td>
+
+                        <td>
+                            ₹${item.price || "-"}
+                        </td>
+
+                        <td>
+                            ${item.remark || "-"}
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                srNo++;
+
+            }
+
+        );
+
+
+        html += `
+
+                </tbody>
+
+            </table>
+
+        `;
+
+
+        list.innerHTML = html;
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            "<p>सेवा की जानकारी लोड नहीं हो पाई।</p>";
+
+    }
+
+}
+
+
+loadServiceItems();
+
+
+</script>
+
+
+</body>
+
+</html>

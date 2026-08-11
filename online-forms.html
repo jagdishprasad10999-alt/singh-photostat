@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>ऑनलाइन फॉर्म - Singh Photostat</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+
+        .service-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .service-table th,
+        .service-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .service-table th {
+            background: #f2f2f2;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <h1>नए ऑनलाइन फॉर्म और अपडेट</h1>
+
+
+    <div class="card">
+
+        <p>
+            यहाँ उपलब्ध नए सरकारी फॉर्म,
+            उनकी अंतिम तारीख और फीस की जानकारी दी गई है।
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Available Forms</h2>
+
+        <div id="formList">
+
+            <p>जानकारी लोड हो रही है...</p>
+
+        </div>
+
+    </div>
+
+
+
+<script type="module">
+
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+
+import {
+
+    getFirestore,
+    collection,
+    getDocs
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
+
+    authDomain:
+        "singh-photostat.firebaseapp.com",
+
+    projectId:
+        "singh-photostat",
+
+    storageBucket:
+        "singh-photostat.firebasestorage.app",
+
+    messagingSenderId:
+        "366679751413",
+
+    appId:
+        "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+
+};
+
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const db =
+    getFirestore(app);
+
+
+
+async function loadForms() {
+
+
+    const list =
+        document.getElementById("formList");
+
+
+    try {
+
+
+        const querySnapshot =
+            await getDocs(
+
+                collection(
+                    db,
+                    "forms"
+                )
+
+            );
+
+
+        if (querySnapshot.empty) {
+
+            list.innerHTML =
+                "<p>अभी कोई नया फॉर्म उपलब्ध नहीं है।</p>";
+
+            return;
+
+        }
+
+
+        let html = `
+
+            <table class="service-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Sr. No.</th>
+
+                        <th>Form Name</th>
+
+                        <th>Last Date</th>
+
+                        <th>Government Fee</th>
+
+                        <th>Service Fee</th>
+
+                        <th>Remark</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+        `;
+
+
+        let srNo = 1;
+
+
+        querySnapshot.forEach(
+
+            function(documentSnapshot) {
+
+
+                const form =
+                    documentSnapshot.data();
+
+
+                html += `
+
+                    <tr>
+
+                        <td>${srNo}</td>
+
+                        <td>
+                            ${form.name || "-"}
+                        </td>
+
+                        <td>
+                            ${form.date || "-"}
+                        </td>
+
+                        <td>
+                            ₹${form.govtFee || "-"}
+                        </td>
+
+                        <td>
+                            ₹${form.serviceFee || "-"}
+                        </td>
+
+                        <td>
+                            ${form.remark || "-"}
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                srNo++;
+
+            }
+
+        );
+
+
+        html += `
+
+                </tbody>
+
+            </table>
+
+        `;
+
+
+        list.innerHTML = html;
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            "<p>फॉर्म की जानकारी लोड नहीं हो पाई।</p>";
+
+    }
+
+}
+
+
+loadForms();
+
+
+</script>
+
+
+</body>
+
+</html>
