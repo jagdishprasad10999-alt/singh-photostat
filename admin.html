@@ -297,8 +297,8 @@ window.saveForm = async function() {
             document.getElementById("formServiceFee").value.trim(),
 
         remark:
-            document.getElementById("formRemark").value.trim()
-
+            document.getElementById("formRemark").value.trim(),
+        pinned: false
     };
 
 
@@ -456,6 +456,22 @@ window.showForms = async function() {
                             Delete
 
                         </button>
+
+<br><br>
+
+<button
+    onclick="toggleFormPin(
+        '${id}',
+        ${form.pinned === true}
+    )">
+
+    ${
+        form.pinned === true
+        ? "📌 Pinned — Unpin"
+        : "📌 Pin to Home"
+    }
+
+</button>
 
                     </div>
 
@@ -1225,6 +1241,100 @@ onAuthStateChanged(
 
 );
 
+/* =========================
+   PIN / UNPIN FORM
+========================= */
+
+window.toggleFormPin = async function(id, currentlyPinned) {
+
+    try {
+
+        if (currentlyPinned) {
+
+            await updateDoc(
+
+                doc(db, "forms", id),
+
+                {
+                    pinned: false
+                }
+
+            );
+
+            alert("Form Unpinned Successfully");
+
+            showForms();
+
+            return;
+        }
+
+
+        const querySnapshot =
+            await getDocs(
+                collection(db, "forms")
+            );
+
+
+        let pinnedCount = 0;
+
+
+        querySnapshot.forEach(
+            function(documentSnapshot) {
+
+                const form =
+                    documentSnapshot.data();
+
+                if (form.pinned === true) {
+
+                    pinnedCount++;
+
+                }
+
+            }
+        );
+
+
+        if (pinnedCount >= 3) {
+
+            alert(
+                "Home Page पर अधिकतम 3 forms ही pin किए जा सकते हैं। पहले किसी form को Unpin करें।"
+            );
+
+            return;
+
+        }
+
+
+        await updateDoc(
+
+            doc(db, "forms", id),
+
+            {
+                pinned: true
+            }
+
+        );
+
+
+        alert("Form Pinned to Home Successfully");
+
+        showForms();
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "Pin/Unpin failed: "
+            + error.message
+        );
+
+    }
+
+};
 
 </script>
 
