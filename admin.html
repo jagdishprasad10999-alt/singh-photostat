@@ -1,69 +1,227 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
     <title>Admin Panel - Singh Photostat</title>
+
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body style="display:none;">
 
+
 <h1>Admin Panel</h1>
+
+
+<!-- =========================
+     FORM MANAGEMENT
+========================= -->
 
 <div class="card">
 
-<h3>नया फॉर्म जोड़ें</h3>
+    <h3>नया फॉर्म जोड़ें</h3>
 
-<label>फॉर्म का नाम:</label>
-<br>
-<input type="text">
 
-<br><br>
+    <label>फॉर्म का नाम:</label>
+    <br>
 
-<label>अंतिम तारीख:</label>
-<br>
-<input type="text">
+    <input type="text" id="formName">
 
-<br><br>
 
-<label>सरकारी फीस:</label>
-<br>
-<input type="text">
+    <br><br>
 
-<br><br>
 
-<label>फीस:</label>
-<br>
-<input type="text">
+    <label>अंतिम तारीख:</label>
+    <br>
 
-<br><br>
+    <input type="text" id="formDate">
 
-<button onclick="saveForm()">
-Save Form
-</button>
 
-<h2>Added Forms</h2>
+    <br><br>
 
-<div id="formList"></div>
+
+    <label>सरकारी फीस:</label>
+    <br>
+
+    <input type="text" id="formGovtFee">
+
+
+    <br><br>
+
+
+    <label>फीस:</label>
+    <br>
+
+    <input type="text" id="formServiceFee">
+
+
+    <br><br>
+
+
+    <label>Remark:</label>
+    <br>
+
+    <input
+        type="text"
+        id="formRemark"
+        placeholder="Additional information">
+
+
+    <br><br>
+
+
+    <button onclick="saveForm()">
+        Save Form
+    </button>
+
+
+    <h2>Added Forms</h2>
+
+
+    <div id="formList"></div>
+
 </div>
 
+
+
 <br><br>
 
+
+
+<!-- =========================
+     SERVICE MANAGEMENT
+========================= -->
+
+<div class="card">
+
+    <h2>Manage Services</h2>
+
+
+    <label>Service चुनें:</label>
+
+    <br><br>
+
+
+    <select id="serviceSelect">
+
+        <option value="photoPrinting">
+            फोटो और प्रिंटिंग
+        </option>
+
+        <option value="laminationCards">
+            लैमिनेशन, कार्ड और Accessories
+        </option>
+
+        <option value="janSeva">
+            जन सेवा केंद्र
+        </option>
+
+        <option value="kisanSeva">
+            किसान सेवाएँ
+        </option>
+
+    </select>
+
+
+    <br><br>
+
+
+    <label>Description:</label>
+
+    <br>
+
+    <input
+        type="text"
+        id="serviceDescription"
+        placeholder="Service description">
+
+
+    <br><br>
+
+
+    <label>Price:</label>
+
+    <br>
+
+    <input
+        type="text"
+        id="servicePrice"
+        placeholder="₹ Price">
+
+
+    <br><br>
+
+
+    <label>Remark:</label>
+
+    <br>
+
+    <input
+        type="text"
+        id="serviceRemark"
+        placeholder="Additional information">
+
+
+    <br><br>
+
+
+    <button onclick="saveServiceItem()">
+        Add Service Item
+    </button>
+
+
+    <h2>Added Service Items</h2>
+
+
+    <div id="serviceList"></div>
+
+</div>
+
+
+
+<br><br>
+
+
+
+<!-- =========================
+     PRODUCT MANAGEMENT
+========================= -->
+
 <a href="product-admin.html">
-    <button>Manage Products</button>
+
+    <button>
+        Manage Products
+    </button>
+
 </a>
+
+
 
 <script type="module">
 
+
 import { initializeApp }
+
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-import {
-    getAuth,
-    onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 
 import {
+
+    getAuth,
+    onAuthStateChanged
+
+}
+
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+
+import {
+
     getFirestore,
     collection,
     addDoc,
@@ -71,51 +229,75 @@ import {
     doc,
     updateDoc,
     deleteDoc
+
 }
+
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
 
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
+    apiKey:
+        "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
 
-    authDomain: "singh-photostat.firebaseapp.com",
+    authDomain:
+        "singh-photostat.firebaseapp.com",
 
-    projectId: "singh-photostat",
+    projectId:
+        "singh-photostat",
 
-    storageBucket: "singh-photostat.firebasestorage.app",
+    storageBucket:
+        "singh-photostat.firebasestorage.app",
 
-    messagingSenderId: "366679751413",
+    messagingSenderId:
+        "366679751413",
 
-    appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+    appId:
+        "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
 
 };
 
 
-const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const app =
+    initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+
+const auth =
+    getAuth(app);
+
+
+const db =
+    getFirestore(app);
+
+
 
 
 /* =========================
    SAVE FORM
 ========================= */
 
+
 window.saveForm = async function() {
 
-    let inputs = document.querySelectorAll("input");
 
-    let newForm = {
+    const newForm = {
 
-        name: inputs[0].value,
+        name:
+            document.getElementById("formName").value.trim(),
 
-        date: inputs[1].value,
+        date:
+            document.getElementById("formDate").value.trim(),
 
-        govtFee: inputs[2].value,
+        govtFee:
+            document.getElementById("formGovtFee").value.trim(),
 
-        serviceFee: inputs[3].value
+        serviceFee:
+            document.getElementById("formServiceFee").value.trim(),
+
+        remark:
+            document.getElementById("formRemark").value.trim()
 
     };
 
@@ -132,25 +314,34 @@ window.saveForm = async function() {
     try {
 
         await addDoc(
+
             collection(db, "forms"),
+
             newForm
+
         );
 
 
         alert("Form Added Successfully");
 
 
-        inputs.forEach(function(input) {
+        document.getElementById("formName").value = "";
 
-            input.value = "";
+        document.getElementById("formDate").value = "";
 
-        });
+        document.getElementById("formGovtFee").value = "";
+
+        document.getElementById("formServiceFee").value = "";
+
+        document.getElementById("formRemark").value = "";
 
 
         showForms();
 
 
-    } catch(error) {
+    }
+
+    catch(error) {
 
         console.error(error);
 
@@ -164,13 +355,17 @@ window.saveForm = async function() {
 };
 
 
+
+
 /* =========================
    SHOW FORMS
 ========================= */
 
+
 window.showForms = async function() {
 
-    let list =
+
+    const list =
         document.getElementById("formList");
 
 
@@ -180,9 +375,12 @@ window.showForms = async function() {
 
     try {
 
+
         const querySnapshot =
             await getDocs(
+
                 collection(db, "forms")
+
             );
 
 
@@ -199,82 +397,101 @@ window.showForms = async function() {
         }
 
 
-        querySnapshot.forEach(function(documentSnapshot) {
-
-            const form =
-                documentSnapshot.data();
-
-            const id =
-                documentSnapshot.id;
+        let srNo = 1;
 
 
-            list.innerHTML += `
+        querySnapshot.forEach(
 
-                <div class="card">
-
-                    <h3>
-                        ${form.name}
-                    </h3>
-
-                    <p>
-                        अंतिम तारीख:
-                        ${form.date}
-                    </p>
-
-                    <p>
-                        सरकारी फीस:
-                        ₹${form.govtFee}
-                    </p>
-
-                    <p>
-                        फीस:
-                        ₹${form.serviceFee}
-                    </p>
-
-                    <button
-                        onclick="editForm('${id}')">
-
-                        Edit
-
-                    </button>
-
-                    <button
-                        onclick="deleteForm('${id}')">
-
-                        Delete
-
-                    </button>
-
-                </div>
-
-            `;
-
-        });
+            function(documentSnapshot) {
 
 
-    } catch(error) {
+                const form =
+                    documentSnapshot.data();
+
+
+                const id =
+                    documentSnapshot.id;
+
+
+                list.innerHTML += `
+
+                    <div class="card">
+
+                        <h3>
+                            ${srNo}. ${form.name}
+                        </h3>
+
+                        <p>
+                            अंतिम तारीख:
+                            ${form.date}
+                        </p>
+
+                        <p>
+                            सरकारी फीस:
+                            ₹${form.govtFee}
+                        </p>
+
+                        <p>
+                            फीस:
+                            ₹${form.serviceFee}
+                        </p>
+
+                        <p>
+                            Remark:
+                            ${form.remark || "-"}
+                        </p>
+
+
+                        <button
+                            onclick="editForm('${id}')">
+
+                            Edit
+
+                        </button>
+
+
+                        <button
+                            onclick="deleteForm('${id}')">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                srNo++;
+
+            }
+
+        );
+
+
+    }
+
+    catch(error) {
 
         console.error(error);
 
         list.innerHTML =
             "<p>Forms load failed.</p>";
 
-
-        alert(
-            "Forms load failed: "
-            + error.message
-        );
-
     }
 
 };
+
+
 
 
 /* =========================
    DELETE FORM
 ========================= */
 
+
 window.deleteForm = async function(id) {
+
 
     if (
         !confirm(
@@ -289,18 +506,25 @@ window.deleteForm = async function(id) {
 
     try {
 
+
         await deleteDoc(
+
             doc(db, "forms", id)
+
         );
 
 
-        alert("Form Deleted Successfully");
+        alert(
+            "Form Deleted Successfully"
+        );
 
 
         showForms();
 
 
-    } catch(error) {
+    }
+
+    catch(error) {
 
         console.error(error);
 
@@ -314,35 +538,54 @@ window.deleteForm = async function(id) {
 };
 
 
+
+
 /* =========================
    EDIT FORM
 ========================= */
 
+
 window.editForm = async function(id) {
+
 
     try {
 
+
         const querySnapshot =
             await getDocs(
+
                 collection(db, "forms")
+
             );
 
 
         let selectedForm = null;
 
 
-        querySnapshot.forEach(function(documentSnapshot) {
+        querySnapshot.forEach(
 
-            if (documentSnapshot.id === id) {
+            function(documentSnapshot) {
 
-                selectedForm = {
-                    id: documentSnapshot.id,
-                    ...documentSnapshot.data()
-                };
+
+                if (
+                    documentSnapshot.id === id
+                ) {
+
+
+                    selectedForm = {
+
+                        id:
+                            documentSnapshot.id,
+
+                        ...documentSnapshot.data()
+
+                    };
+
+                }
 
             }
 
-        });
+        );
 
 
         if (!selectedForm) {
@@ -354,7 +597,7 @@ window.editForm = async function(id) {
         }
 
 
-        let name =
+        const name =
             prompt(
                 "Form Name",
                 selectedForm.name
@@ -364,7 +607,7 @@ window.editForm = async function(id) {
         if (name === null) return;
 
 
-        let date =
+        const date =
             prompt(
                 "Last Date",
                 selectedForm.date
@@ -374,7 +617,7 @@ window.editForm = async function(id) {
         if (date === null) return;
 
 
-        let govtFee =
+        const govtFee =
             prompt(
                 "Government Fee",
                 selectedForm.govtFee
@@ -384,7 +627,7 @@ window.editForm = async function(id) {
         if (govtFee === null) return;
 
 
-        let serviceFee =
+        const serviceFee =
             prompt(
                 "Service Charge",
                 selectedForm.serviceFee
@@ -392,6 +635,16 @@ window.editForm = async function(id) {
 
 
         if (serviceFee === null) return;
+
+
+        const remark =
+            prompt(
+                "Remark",
+                selectedForm.remark || ""
+            );
+
+
+        if (remark === null) return;
 
 
         await updateDoc(
@@ -406,20 +659,26 @@ window.editForm = async function(id) {
 
                 govtFee: govtFee,
 
-                serviceFee: serviceFee
+                serviceFee: serviceFee,
+
+                remark: remark
 
             }
 
         );
 
 
-        alert("Form Updated Successfully");
+        alert(
+            "Form Updated Successfully"
+        );
 
 
         showForms();
 
 
-    } catch(error) {
+    }
+
+    catch(error) {
 
         console.error(error);
 
@@ -433,38 +692,543 @@ window.editForm = async function(id) {
 };
 
 
+
+
 /* =========================
-   LOGIN CHECK
+   SAVE SERVICE ITEM
 ========================= */
 
-onAuthStateChanged(auth, function(user) {
 
-    if (user) {
+window.saveServiceItem = async function() {
 
-        console.log(
-            "Admin logged in:",
-            user.email
+
+    const serviceId =
+        document.getElementById(
+            "serviceSelect"
+        ).value;
+
+
+    const description =
+        document.getElementById(
+            "serviceDescription"
+        ).value.trim();
+
+
+    const price =
+        document.getElementById(
+            "servicePrice"
+        ).value.trim();
+
+
+    const remark =
+        document.getElementById(
+            "serviceRemark"
+        ).value.trim();
+
+
+    if (!description) {
+
+        alert(
+            "Please enter Description."
+        );
+
+        return;
+
+    }
+
+
+    if (!price) {
+
+        alert(
+            "Please enter Price."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+
+        await addDoc(
+
+            collection(
+                db,
+                "services",
+                serviceId,
+                "items"
+            ),
+
+            {
+
+                description: description,
+
+                price: price,
+
+                remark: remark
+
+            }
+
         );
 
 
-        document.body.style.display =
-            "block";
+        alert(
+            "Service Item Added Successfully"
+        );
 
 
-        showForms();
+        document.getElementById(
+            "serviceDescription"
+        ).value = "";
 
 
-    } else {
+        document.getElementById(
+            "servicePrice"
+        ).value = "";
 
-        window.location.replace(
-            "admin-login.html"
+
+        document.getElementById(
+            "serviceRemark"
+        ).value = "";
+
+
+        showServiceItems();
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "Service save failed: "
+            + error.message
         );
 
     }
 
-});
+};
+
+
+
+
+/* =========================
+   SHOW SERVICE ITEMS
+========================= */
+
+
+window.showServiceItems = async function() {
+
+
+    const serviceId =
+        document.getElementById(
+            "serviceSelect"
+        ).value;
+
+
+    const list =
+        document.getElementById(
+            "serviceList"
+        );
+
+
+    list.innerHTML =
+        "<p>Loading...</p>";
+
+
+    try {
+
+
+        const querySnapshot =
+            await getDocs(
+
+                collection(
+                    db,
+                    "services",
+                    serviceId,
+                    "items"
+                )
+
+            );
+
+
+        list.innerHTML = "";
+
+
+        if (querySnapshot.empty) {
+
+            list.innerHTML =
+                "<p>No service items added yet.</p>";
+
+            return;
+
+        }
+
+
+        let srNo = 1;
+
+
+        querySnapshot.forEach(
+
+            function(documentSnapshot) {
+
+
+                const item =
+                    documentSnapshot.data();
+
+
+                const id =
+                    documentSnapshot.id;
+
+
+                list.innerHTML += `
+
+                    <div class="card">
+
+                        <h3>
+                            ${srNo}.
+                            ${item.description}
+                        </h3>
+
+                        <p>
+                            Price:
+                            ₹${item.price}
+                        </p>
+
+                        <p>
+                            Remark:
+                            ${item.remark || "-"}
+                        </p>
+
+
+                        <button
+                            onclick="
+                                editServiceItem(
+                                    '${serviceId}',
+                                    '${id}'
+                                )
+                            ">
+
+                            Edit
+
+                        </button>
+
+
+                        <button
+                            onclick="
+                                deleteServiceItem(
+                                    '${serviceId}',
+                                    '${id}'
+                                )
+                            ">
+
+                            Delete
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                srNo++;
+
+            }
+
+        );
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            "<p>Service items load failed.</p>";
+
+    }
+
+};
+
+
+
+
+/* =========================
+   EDIT SERVICE ITEM
+========================= */
+
+
+window.editServiceItem =
+async function(serviceId, id) {
+
+
+    try {
+
+
+        const querySnapshot =
+            await getDocs(
+
+                collection(
+                    db,
+                    "services",
+                    serviceId,
+                    "items"
+                )
+
+            );
+
+
+        let selectedItem = null;
+
+
+        querySnapshot.forEach(
+
+            function(documentSnapshot) {
+
+
+                if (
+                    documentSnapshot.id === id
+                ) {
+
+                    selectedItem = {
+
+                        ...documentSnapshot.data()
+
+                    };
+
+                }
+
+            }
+
+        );
+
+
+        if (!selectedItem) {
+
+            alert(
+                "Service item not found."
+            );
+
+            return;
+
+        }
+
+
+        const description =
+            prompt(
+                "Description",
+                selectedItem.description
+            );
+
+
+        if (description === null) return;
+
+
+        const price =
+            prompt(
+                "Price",
+                selectedItem.price
+            );
+
+
+        if (price === null) return;
+
+
+        const remark =
+            prompt(
+                "Remark",
+                selectedItem.remark || ""
+            );
+
+
+        if (remark === null) return;
+
+
+        await updateDoc(
+
+            doc(
+                db,
+                "services",
+                serviceId,
+                "items",
+                id
+            ),
+
+            {
+
+                description: description,
+
+                price: price,
+
+                remark: remark
+
+            }
+
+        );
+
+
+        alert(
+            "Service Item Updated Successfully"
+        );
+
+
+        showServiceItems();
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "Update failed: "
+            + error.message
+        );
+
+    }
+
+};
+
+
+
+
+/* =========================
+   DELETE SERVICE ITEM
+========================= */
+
+
+window.deleteServiceItem =
+async function(serviceId, id) {
+
+
+    if (
+        !confirm(
+            "Delete this service item?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+
+        await deleteDoc(
+
+            doc(
+                db,
+                "services",
+                serviceId,
+                "items",
+                id
+            )
+
+        );
+
+
+        alert(
+            "Service Item Deleted Successfully"
+        );
+
+
+        showServiceItems();
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "Delete failed: "
+            + error.message
+        );
+
+    }
+
+};
+
+
+
+
+/* =========================
+   SERVICE SELECTION CHANGE
+========================= */
+
+
+document.getElementById(
+    "serviceSelect"
+).addEventListener(
+
+    "change",
+
+    function() {
+
+        showServiceItems();
+
+    }
+
+);
+
+
+
+
+/* =========================
+   LOGIN CHECK
+========================= */
+
+
+onAuthStateChanged(
+
+    auth,
+
+    function(user) {
+
+
+        if (user) {
+
+
+            console.log(
+                "Admin logged in:",
+                user.email
+            );
+
+
+            document.body.style.display =
+                "block";
+
+
+            showForms();
+
+            showServiceItems();
+
+
+        }
+
+        else {
+
+
+            window.location.replace(
+                "admin-login.html"
+            );
+
+        }
+
+    }
+
+);
+
 
 </script>
 
+
 </body>
+
 </html>
