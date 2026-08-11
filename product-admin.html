@@ -192,19 +192,14 @@ async function addProductToFirestore(
 
         await addDoc(
             collection(db, "products"),
-            {
-
-                name: name,
-
-                price: Number(price),
-
-                description: description,
-
-                image: image,
-
-                createdAt: serverTimestamp()
-
-            }
+    {
+    name: name,
+    price: Number(price),
+    description: description,
+    image: image,
+    pinned: false,
+    createdAt: serverTimestamp()
+}
         );
 
 
@@ -318,15 +313,30 @@ async function showProducts() {
                     <br><br>
 
                     <button
-                        onclick="editProduct('${id}')">
-                        Edit
-                    </button>
+    onclick="editProduct('${id}')">
+    Edit
+</button>
 
 
-                    <button
-                        onclick="deleteProduct('${id}')">
-                        Delete
-                    </button>
+<button
+    onclick="deleteProduct('${id}')">
+    Delete
+</button>
+
+
+<br><br>
+
+
+<button
+    onclick="toggleProductPin('${id}', ${product.pinned === true})">
+
+    ${
+        product.pinned === true
+        ? "📌 Pinned — Unpin"
+        : "📌 Pin to Home"
+    }
+
+</button>
 
                 </div>
 
@@ -438,6 +448,111 @@ window.editProduct = async function(id) {
 
         alert(
             "Update failed: "
+            + error.message
+        );
+
+    }
+
+};
+
+/* =========================
+   PIN / UNPIN PRODUCT
+========================= */
+
+window.toggleProductPin = async function(id, currentlyPinned) {
+
+    try {
+
+        // अगर product पहले से pinned है
+        // तो सीधे unpin करें
+
+        if (currentlyPinned) {
+
+            await updateDoc(
+
+                doc(db, "products", id),
+
+                {
+                    pinned: false
+                }
+
+            );
+
+            alert("Product Unpinned Successfully");
+
+            showProducts();
+
+            return;
+        }
+
+
+        // सभी products check करें
+
+        const querySnapshot =
+            await getDocs(
+                collection(db, "products")
+            );
+
+
+        let pinnedCount = 0;
+
+
+        querySnapshot.forEach(
+            function(documentSnapshot) {
+
+                const product =
+                    documentSnapshot.data();
+
+
+                if (product.pinned === true) {
+
+                    pinnedCount++;
+
+                }
+
+            }
+        );
+
+
+        // Maximum 3 pinned products
+
+        if (pinnedCount >= 3) {
+
+            alert(
+                "Home Page पर अधिकतम 3 products ही pin किए जा सकते हैं। पहले किसी product को Unpin करें।"
+            );
+
+            return;
+
+        }
+
+
+        // Product को pin करें
+
+        await updateDoc(
+
+            doc(db, "products", id),
+
+            {
+                pinned: true
+            }
+
+        );
+
+
+        alert("Product Pinned to Home Successfully");
+
+        showProducts();
+
+
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        alert(
+            "Pin/Unpin failed: "
             + error.message
         );
 
