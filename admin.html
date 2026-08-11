@@ -54,61 +54,118 @@ Save Form
 
 <script>
 
-function saveForm(){
+async function saveForm(){
 
-let inputs = document.querySelectorAll("input");
+    let inputs = document.querySelectorAll("input");
 
-let newForm = {
-    name: inputs[0].value,
-    date: inputs[1].value,
-    govtFee: inputs[2].value,
-    serviceFee: inputs[3].value
-};
+    let newForm = {
+        name: inputs[0].value,
+        date: inputs[1].value,
+        govtFee: inputs[2].value,
+        serviceFee: inputs[3].value
+    };
 
+    try {
 
-let forms = JSON.parse(localStorage.getItem("forms")) || [];
+        await addDoc(
+            collection(db, "forms"),
+            newForm
+        );
 
+        alert("Form Added Successfully");
 
-forms.push(newForm);
+        inputs.forEach(function(input){
+            input.value = "";
+        });
 
+        showForms();
 
-localStorage.setItem("forms", JSON.stringify(forms));
+    } catch(error) {
 
+        console.error(error);
 
-alert("Form Added Successfully");
+        alert("Form save failed: " + error.message);
+
+    }
 
 }
-function showForms(){
 
-let forms = JSON.parse(localStorage.getItem("forms")) || [];
+async function showForms(){
 
-let list = document.getElementById("formList");
+    let list = document.getElementById("formList");
 
-list.innerHTML = "";
+    list.innerHTML = "<p>Loading forms...</p>";
 
-forms.forEach(function(form,index){
+    try {
 
-list.innerHTML += `
+        const querySnapshot =
+            await getDocs(
+                collection(db, "forms")
+            );
 
-<div class="card">
+        list.innerHTML = "";
 
-<h3>${form.name}</h3>
+        if (querySnapshot.empty) {
 
-<p>${form.date}</p>
+            list.innerHTML =
+                "<p>No forms added yet.</p>";
 
-<button onclick="editForm(${index})">
-Edit
-</button>
+            return;
+        }
 
-<button onclick="deleteForm(${index})">
-Delete
-</button>
+        querySnapshot.forEach(function(documentSnapshot){
 
-</div>
+            const form =
+                documentSnapshot.data();
 
-`;
+            const id =
+                documentSnapshot.id;
 
-});
+            list.innerHTML += `
+
+                <div class="card">
+
+                    <h3>${form.name}</h3>
+
+                    <p>
+                        अंतिम तारीख: ${form.date}
+                    </p>
+
+                    <p>
+                        सरकारी फीस: ₹${form.govtFee}
+                    </p>
+
+                    <p>
+                        फीस: ₹${form.serviceFee}
+                    </p>
+
+                    <button onclick="editForm('${id}')">
+                        Edit
+                    </button>
+
+                    <button onclick="deleteForm('${id}')">
+                        Delete
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
+    } catch(error) {
+
+        console.error(error);
+
+        list.innerHTML =
+            "<p>Forms load failed.</p>";
+
+        alert(
+            "Forms load failed: "
+            + error.message
+        );
+
+    }
 
 }
 
@@ -172,6 +229,13 @@ import {
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
 
@@ -194,6 +258,7 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
+const db = getFirestore(app);
 
 onAuthStateChanged(auth, function(user) {
 
