@@ -239,38 +239,60 @@ async function loadProducts() {
         }
 
 
-        querySnapshot.forEach(function(documentSnapshot) {
-
-            const product =
-                documentSnapshot.data();
+let pinnedCount = 0;
 
 
-            productList.innerHTML += `
+querySnapshot.forEach(function(documentSnapshot) {
 
-                <div class="card">
+    const product =
+        documentSnapshot.data();
 
-                    <h3>${product.name}</h3>
 
-                    <p>
-                        ${product.description}
-                    </p>
+    // केवल pinned products दिखाएँ
+    if (product.pinned !== true) {
 
-                    <h3>
-                        ₹${product.price}
-                    </h3>
+        return;
 
-                    <a
-    href="order.html?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}">
+    }
 
-    Order Now
 
-</a>
+    // Maximum 3 products
+    if (pinnedCount >= 3) {
 
-                </div>
+        return;
 
-            `;
+    }
 
-        });
+
+    productList.innerHTML += `
+
+        <div class="card">
+
+            <h3>${product.name}</h3>
+
+            <p>
+                ${product.description}
+            </p>
+
+            <h3>
+                ₹${product.price}
+            </h3>
+
+            <a
+                href="order.html?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}">
+
+                Order Now
+
+            </a>
+
+        </div>
+
+    `;
+
+
+    pinnedCount++;
+
+});
 
 
     } catch (error) {
@@ -350,52 +372,77 @@ async function loadForms() {
 
         }
 
-
-        querySnapshot.forEach(function(documentSnapshot) {
-
-            const form =
-                documentSnapshot.data();
+let pinnedCount = 0;
 
 
-            formList.innerHTML += `
+querySnapshot.forEach(function(documentSnapshot) {
 
-                <div class="card">
+    const form =
+        documentSnapshot.data();
 
-                    <h3>
-                        ${form.name}
-                    </h3>
 
-                    <p>
-                        अंतिम तारीख:
-                        ${form.date}
-                    </p>
+    // केवल pinned forms
+    if (form.pinned !== true) {
 
-                    <p>
-                        सरकारी फीस:
-                        ₹${form.govtFee}
-                    </p>
+        return;
 
-                    <p>
-                        फीस:
-                        ₹${form.serviceFee}
-                    </p>
+    }
 
-                    <a
-                        href="https://wa.me/918650515172?text=${encodeURIComponent(
-                            "मुझे " + form.name + " के बारे में जानकारी चाहिए।"
-                        )}"
-                        target="_blank">
 
-                        WhatsApp पर जानकारी लें
+    // Maximum 3 forms
+    if (pinnedCount >= 3) {
 
-                    </a>
+        return;
 
-                </div>
+    }
 
-            `;
 
-        });
+    formList.innerHTML += `
 
+        <div class="card">
+
+            <h3>
+                ${form.name}
+            </h3>
+
+            <p>
+                अंतिम तारीख:
+                ${form.date}
+            </p>
+
+            <p>
+                सरकारी फीस:
+                ₹${form.govtFee}
+            </p>
+
+            <p>
+                फीस:
+                ₹${form.serviceFee}
+            </p>
+
+            <p>
+                Remark:
+                ${form.remark || "-"}
+            </p>
+
+            <a
+                href="https://wa.me/918650515172?text=${encodeURIComponent(
+                    "मुझे " + form.name + " के बारे में जानकारी चाहिए।"
+                )}"
+                target="_blank">
+
+                WhatsApp पर जानकारी लें
+
+            </a>
+
+        </div>
+
+    `;
+
+
+    pinnedCount++;
+
+});
 
     } catch(error) {
 
