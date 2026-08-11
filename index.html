@@ -205,12 +205,11 @@ async function loadProducts() {
                     </h3>
 
                     <a
-                        href="https://wa.me/918650515172?text=मुझे ${encodeURIComponent(product.name)} चाहिए।"
-                        target="_blank">
+    href="order.html?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}">
 
-                        WhatsApp पर Order करें
+    Order Now
 
-                    </a>
+</a>
 
                 </div>
 
