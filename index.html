@@ -74,26 +74,19 @@ Kasganj, Uttar Pradesh
     </a>
 
 </section>
+
 <section id="forms">
+
     <h2>🆕 नए ऑनलाइन फॉर्म और अपडेट</h2>
 
-    <div class="services">
+    <div class="services" id="formList">
 
-        <div class="card">
-            <h3>नया फॉर्म अपडेट</h3>
-            <p>यहाँ नए सरकारी फॉर्म की जानकारी दी जाएगी।</p>
-            <p>अंतिम तारीख: जल्द अपडेट होगा</p>
-            <p>फीस: जल्द अपडेट होगा</p>
-        </div>
-
-        <div class="card">
-            <h3>सरकारी योजना</h3>
-            <p>किसानों और आम नागरिकों के लिए नई योजनाएँ।</p>
-        </div>
+        <p>Forms loading...</p>
 
     </div>
 
 </section>
+
 <section id="fees">
     <h2>💰 हमारी सेवाओं की फीस</h2>
 
@@ -239,6 +232,130 @@ async function loadProducts() {
 
 
 loadProducts();
+
+</script>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+    getFirestore,
+    collection,
+    getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
+
+    authDomain: "singh-photostat.firebaseapp.com",
+
+    projectId: "singh-photostat",
+
+    storageBucket: "singh-photostat.firebasestorage.app",
+
+    messagingSenderId: "366679751413",
+
+    appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+async function loadForms() {
+
+    const formList =
+        document.getElementById("formList");
+
+
+    try {
+
+        const querySnapshot =
+            await getDocs(
+                collection(db, "forms")
+            );
+
+
+        formList.innerHTML = "";
+
+
+        if (querySnapshot.empty) {
+
+            formList.innerHTML =
+                "<p>अभी कोई नया फॉर्म उपलब्ध नहीं है।</p>";
+
+            return;
+
+        }
+
+
+        querySnapshot.forEach(function(documentSnapshot) {
+
+            const form =
+                documentSnapshot.data();
+
+
+            formList.innerHTML += `
+
+                <div class="card">
+
+                    <h3>
+                        ${form.name}
+                    </h3>
+
+                    <p>
+                        अंतिम तारीख:
+                        ${form.date}
+                    </p>
+
+                    <p>
+                        सरकारी फीस:
+                        ₹${form.govtFee}
+                    </p>
+
+                    <p>
+                        फीस:
+                        ₹${form.serviceFee}
+                    </p>
+
+                    <a
+                        href="https://wa.me/918650515172?text=${encodeURIComponent(
+                            "मुझे " + form.name + " के बारे में जानकारी चाहिए।"
+                        )}"
+                        target="_blank">
+
+                        WhatsApp पर जानकारी लें
+
+                    </a>
+
+                </div>
+
+            `;
+
+        });
+
+
+    } catch(error) {
+
+        console.error(error);
+
+        formList.innerHTML =
+            "<p>Forms load नहीं हो पाए।</p>";
+
+    }
+
+}
+
+
+loadForms();
 
 </script>
 
