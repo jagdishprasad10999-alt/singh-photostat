@@ -25,35 +25,90 @@ Kasganj, Uttar Pradesh
 
 
 <section id="services">
+
     <h2>हमारी सेवाएँ</h2>
 
     <div class="services">
-        
 
-        <div class="card">
+        <div class="card service-card"
+             onclick="showService('onlineForms')">
+
             <h3>ऑनलाइन फॉर्म</h3>
-            <p>सरकारी नौकरी, स्कॉलरशिप, एडमिशन और सभी ऑनलाइन आवेदन।</p>
+
+            <p>
+                सरकारी नौकरी, स्कॉलरशिप, एडमिशन
+                और सभी ऑनलाइन आवेदन।
+            </p>
+
         </div>
 
-        <div class="card">
+
+      <div class="card service-card"
+     onclick="window.location.href='photo-printing.html'">
+
             <h3>फोटो और प्रिंटिंग</h3>
-            <p>फोटो, प्रिंटआउट, स्कैनिंग और फोटो कॉपी सुविधा।</p>
+
+            <p>
+                फोटो, प्रिंट, स्कैनिंग,
+                फोटो कॉपी और अन्य सेवाएँ।
+            </p>
+
         </div>
 
-        <div class="card">
-            <h3>लैमिनेशन और कार्ड</h3>
-            <p>डॉक्यूमेंट लैमिनेशन और विभिन्न प्रकार के कार्ड।</p>
-        </div>
-<div class="card">
-    <h3>जन सेवा केंद्र</h3>
-    <p>आय, जाति, निवास प्रमाण पत्र और सरकारी ऑनलाइन सेवाएँ।</p>
-</div>
 
-<div class="card">
-    <h3>किसान सेवाएँ</h3>
-    <p>किसानों के लिए ऑनलाइन आवेदन और सरकारी योजनाओं की सुविधा।</p>
-</div>
-        
+        <div class="card service-card"
+             onclick="showService('laminationCards')">
+
+            <h3>लैमिनेशन, कार्ड और Accessories</h3>
+
+            <p>
+                डॉक्यूमेंट लैमिनेशन,
+                विभिन्न कार्ड और अन्य accessories।
+            </p>
+
+        </div>
+
+
+        <div class="card service-card"
+             onclick="showService('janSeva')">
+
+            <h3>जन सेवा केंद्र</h3>
+
+            <p>
+                जाति, निवास, आय प्रमाण पत्र
+                और अन्य सरकारी सेवाएँ।
+            </p>
+
+        </div>
+
+
+        <div class="card service-card"
+             onclick="showService('kisanSeva')">
+
+            <h3>किसान सेवाएँ</h3>
+
+            <p>
+                किसानों के लिए ऑनलाइन आवेदन
+                और सरकारी योजनाओं की सुविधा।
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="serviceDetails">
+
+    <h2>सेवा की जानकारी</h2>
+
+    <div id="serviceDetailsContent" class="card">
+
+        <p>
+            ऊपर किसी सेवा पर क्लिक करके
+            उसकी पूरी जानकारी और फीस देखें।
+        </p>
 
     </div>
 
@@ -355,6 +410,121 @@ async function loadForms() {
 
 
 loadForms();
+
+</script>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+    getFirestore,
+    doc,
+    getDoc
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyCCJcM_Ngo8O0KR6PGoDqEfubvyQ0NScF4",
+
+    authDomain: "singh-photostat.firebaseapp.com",
+
+    projectId: "singh-photostat",
+
+    storageBucket: "singh-photostat.firebasestorage.app",
+
+    messagingSenderId: "366679751413",
+
+    appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+
+window.showService = async function(serviceId) {
+
+    const content =
+        document.getElementById("serviceDetailsContent");
+
+
+    content.innerHTML =
+        "<p>जानकारी लोड हो रही है...</p>";
+
+
+    try {
+
+        const serviceRef =
+            doc(db, "services", serviceId);
+
+        const serviceSnap =
+            await getDoc(serviceRef);
+
+
+        if (!serviceSnap.exists()) {
+
+            content.innerHTML =
+                "<p>इस सेवा की जानकारी उपलब्ध नहीं है।</p>";
+
+            return;
+
+        }
+
+
+        const service =
+            serviceSnap.data();
+
+
+        content.innerHTML = `
+
+            <h3>
+                ${service.title}
+            </h3>
+
+            <p>
+                ${service.description}
+            </p>
+
+            <hr>
+
+            <p>
+                <strong>विस्तृत जानकारी:</strong>
+            </p>
+
+            <p>
+                ${service.details}
+            </p>
+
+            <p>
+                <strong>फीस:</strong>
+                ${service.fees}
+            </p>
+
+        `;
+
+
+        document.getElementById("serviceDetails")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+
+    } catch(error) {
+
+        console.error(error);
+
+        content.innerHTML =
+            "<p>सेवा की जानकारी लोड नहीं हो पाई।</p>";
+
+    }
+
+};
 
 </script>
 
