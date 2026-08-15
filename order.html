@@ -20,6 +20,11 @@ body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f4
 .section-title{display:flex;align-items:center;gap:11px;color:#062f6b;margin:0 0 20px;font-size:22px}
 .section-icon{width:40px;height:40px;border-radius:10px;background:#fff0df;display:grid;place-items:center;font-size:21px}
 .product-summary{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:25px}
+.product-photo-box{grid-column:1/-1}
+.order-product-photo{height:190px;background:#f2f6fb;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.order-product-photo img{width:100%;height:100%;object-fit:contain}
+#noProductImage{font-size:48px;opacity:.28}
+
 .info-box{background:#f4f8fd;border:1px solid #dbe6f2;border-radius:11px;padding:14px}
 .info-box label{display:block;color:#6d7d92;font-size:12px;font-weight:700;margin-bottom:5px}
 .info-value{font-size:16px;font-weight:800;color:#062f6b;word-break:break-word}
@@ -46,8 +51,21 @@ body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f4
 <section class="order-card">
 <h2 class="section-title"><span class="section-icon">🛍️</span>Product Details</h2>
 <div class="product-summary">
-<div class="info-box"><label>Product</label><div class="info-value" id="productName">-</div></div>
-<div class="info-box"><label>Price</label><div class="info-value">₹<span id="productPrice">0</span></div></div>
+<div class="info-box product-photo-box">
+<label>Product Photo</label>
+<div class="order-product-photo">
+    <img id="productImage" src="" alt="Product Image" style="display:none;">
+    <div id="noProductImage">🛍️</div>
+</div>
+</div>
+<div class="info-box">
+<label>Product</label>
+<div class="info-value" id="productName">-</div>
+</div>
+<div class="info-box">
+<label>Price</label>
+<div class="info-value">₹<span id="productPrice">0</span></div>
+</div>
 </div>
 <h2 class="section-title"><span class="section-icon">👤</span>Customer Details</h2>
 <div class="form-grid">
@@ -62,70 +80,109 @@ body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f4
 </section>
 </main>
 <footer class="order-footer"><strong>Singh Photostat & Jan Seva Kendra</strong><br>आपकी सभी ऑनलाइन और डिजिटल सेवाओं का भरोसेमंद केंद्र।</footer>
-<script>
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-let params = new URLSearchParams(window.location.search);
+import {
+    getFirestore,
+    collection,
+    getDocs
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-let product = params.get("product");
-let price = params.get("price");
+const firebaseConfig = {
+    apiKey: "AIzaSyCCJcM_Ngo8OKR6PGoDqEfubvyQ0NScF4",
+    authDomain: "singh-photostat.firebaseapp.com",
+    projectId: "singh-photostat",
+    storageBucket: "singh-photostat.firebasestorage.app",
+    messagingSenderId: "366679751413",
+    appId: "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const params = new URLSearchParams(window.location.search);
+
+const product = params.get("product");
+const price = params.get("price");
 
 document.getElementById("productName").innerText = product || "-";
 document.getElementById("productPrice").innerText = price || "0";
 
 calculateTotal();
+loadProductImage();
 
+async function loadProductImage(){
+    if(!product) return;
 
-function calculateTotal(){
+    try{
+        const querySnapshot = await getDocs(collection(db, "products"));
 
-    let price = Number(document.getElementById("productPrice").innerText) || 0;
+        let found = false;
 
-    let quantity = Number(document.getElementById("quantity").value) || 1;
+        querySnapshot.forEach(function(documentSnapshot){
+            if(found) return;
 
-    let total = price * quantity;
+            const data = documentSnapshot.data();
 
-    document.getElementById("totalPrice").innerText = total;
+            if(data.name === product && data.image && data.image !== "no-image"){
+                const image = document.getElementById("productImage");
+                const noImage = document.getElementById("noProductImage");
 
+                image.src = data.image;
+                image.style.display = "block";
+                noImage.style.display = "none";
+
+                found = true;
+            }
+        });
+    }catch(error){
+        console.error("Product image load failed:", error);
+    }
 }
 
+function calculateTotal(){
+    const price = Number(document.getElementById("productPrice").innerText) || 0;
+    const quantity = Number(document.getElementById("quantity").value) || 1;
+    const total = price * quantity;
 
-function placeOrder(){
+    document.getElementById("totalPrice").innerText = total;
+}
 
-    let name = document.getElementById("customerName").value;
-    let mobile = document.getElementById("customerMobile").value;
-    let product = document.getElementById("productName").innerText;
-    let price = document.getElementById("productPrice").innerText;
-    let quantity = document.getElementById("quantity").value;
-    let total = document.getElementById("totalPrice").innerText;
+window.calculateTotal = calculateTotal;
 
+window.placeOrder = function(){
+
+    const name = document.getElementById("customerName").value.trim();
+    const mobile = document.getElementById("customerMobile").value.trim();
+    const product = document.getElementById("productName").innerText;
+    const price = document.getElementById("productPrice").innerText;
+    const quantity = document.getElementById("quantity").value;
+    const total = document.getElementById("totalPrice").innerText;
 
     if(name === "" || mobile === ""){
-
         alert("कृपया अपना नाम और मोबाइल नंबर भरें।");
-
         return;
-
     }
 
+    const message =
+        "नया Order%0A%0A" +
+        "नाम: " + encodeURIComponent(name) + "%0A" +
+        "मोबाइल: " + encodeURIComponent(mobile) + "%0A" +
+        "Product: " + encodeURIComponent(product) + "%0A" +
+        "Price: ₹" + encodeURIComponent(price) + "%0A" +
+        "Quantity: " + encodeURIComponent(quantity) + "%0A" +
+        "Total: ₹" + encodeURIComponent(total);
 
-    let message =
-    "नया Order%0A%0A" +
-    "नाम: " + name + "%0A" +
-    "मोबाइल: " + mobile + "%0A" +
-    "Product: " + product + "%0A" +
-    "Price: ₹" + price + "%0A" +
-    "Quantity: " + quantity + "%0A" +
-    "Total: ₹" + total;
-
-
-    let whatsappNumber = "918650515172";
+    const whatsappNumber = "918650515172";
 
     window.open(
         "https://wa.me/" + whatsappNumber + "?text=" + message,
         "_blank"
     );
-
-}
-
+};
 </script>
 
 </body>
