@@ -1,59 +1,67 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="hi">
 <head>
-    <title>Order - Singh Photostat</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order - Singh Photostat & Jan Seva Kendra</title>
+<link rel="stylesheet" href="style.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f4f8fd;color:#183b70}
+.order-topbar{background:#062f6b;color:#fff;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:18px;box-shadow:0 3px 12px rgba(0,0,0,.14)}
+.order-brand{display:flex;align-items:center;gap:12px}
+.order-brand img{width:48px;height:48px;object-fit:contain;background:#fff;border-radius:9px;padding:3px}
+.order-brand strong{display:block;font-size:20px}.order-brand small{display:block;font-size:11px;opacity:.82}
+.home-btn{color:#fff;text-decoration:none;background:#ff7a00;padding:10px 17px;border-radius:8px;font-weight:800}
+.order-wrap{width:min(920px,92%);margin:32px auto 55px}
+.order-hero{background:linear-gradient(135deg,#062f6b,#125ba8);color:#fff;border-radius:20px;padding:27px 30px;box-shadow:0 8px 24px rgba(4,45,104,.18);margin-bottom:22px}
+.order-hero h1{margin:0 0 7px;font-size:30px}.order-hero p{margin:0;color:#e7f0ff;line-height:1.55}
+.order-card{background:#fff;border:1px solid #dce6f2;border-radius:18px;box-shadow:0 6px 22px rgba(20,55,100,.09);padding:28px}
+.section-title{display:flex;align-items:center;gap:11px;color:#062f6b;margin:0 0 20px;font-size:22px}
+.section-icon{width:40px;height:40px;border-radius:10px;background:#fff0df;display:grid;place-items:center;font-size:21px}
+.product-summary{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:25px}
+.info-box{background:#f4f8fd;border:1px solid #dbe6f2;border-radius:11px;padding:14px}
+.info-box label{display:block;color:#6d7d92;font-size:12px;font-weight:700;margin-bottom:5px}
+.info-value{font-size:16px;font-weight:800;color:#062f6b;word-break:break-word}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group label{display:block;margin-bottom:7px;color:#29466f;font-size:13px;font-weight:800}
+.form-group input{width:100%;padding:12px 13px;border:1px solid #cbd8e8;border-radius:9px;background:#fbfdff;font-size:15px;color:#193a6b}
+.form-group input:focus{outline:none;border-color:#1769c2;box-shadow:0 0 0 3px rgba(23,105,194,.11)}
+.total-box{margin:23px 0 18px;padding:17px 18px;background:#eaf6ed;border:1px solid #c8e7d0;border-radius:11px;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.total-box span{font-weight:800;color:#27613a}.total-box strong{font-size:25px;color:#16833f}
+.whatsapp-btn{width:100%;border:0;border-radius:10px;padding:14px;background:#ff7a00;color:#fff;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 10px rgba(255,122,0,.22)}
+.whatsapp-btn:hover{background:#e96c00}
+.note{margin-top:14px;text-align:center;color:#718198;font-size:12px;line-height:1.5}
+.order-footer{background:#062f6b;color:#dfeaff;text-align:center;padding:24px 15px;font-size:13px}.order-footer strong{color:#fff}
+@media(max-width:650px){.order-topbar{padding:12px 4%}.order-brand img{width:42px;height:42px}.order-brand strong{font-size:17px}.order-brand small{font-size:9px}.home-btn{padding:8px 11px;font-size:13px}.order-wrap{width:94%;margin-top:20px}.order-hero{padding:22px}.order-hero h1{font-size:25px}.order-card{padding:19px}.product-summary,.form-grid{grid-template-columns:1fr}.total-box{align-items:flex-start;flex-direction:column}}
+</style>
 </head>
-
 <body>
-
-    <h1>ऑनलाइन ऑर्डर</h1>
-
-    <div class="card">
-
-        <label>आपका नाम:</label>
-        <br>
-        <input type="text" id="customerName" placeholder="अपना नाम लिखें">
-
-        <br><br>
-
-        <label>मोबाइल नंबर:</label>
-        <br>
-        <input type="tel" id="customerMobile" placeholder="मोबाइल नंबर">
-
-        <br><br>
-
-        <label>Product:</label>
-        <br>
-        <input type="text" id="productName" readonly>
-
-        <br><br>
-
-        <label>Price:</label>
-        <br>
-        <input type="text" id="productPrice" readonly>
-
-        <br><br>
-
-        <label>Quantity:</label>
-        <br>
-        <input type="number" id="quantity" value="1" min="1"
-               onchange="calculateTotal()">
-
-        <br><br>
-
-        <h3>
-            Total: ₹<span id="totalPrice">0</span>
-        </h3>
-
-        <button onclick="placeOrder()">
-            WhatsApp पर Order करें
-        </button>
-
-    </div>
-
-
+<header class="order-topbar">
+<div class="order-brand"><img src="singh-logo-crop.png" alt="Singh Photostat Logo"><div><strong>Singh Photostat</strong><small>PHOTO STATE & JAN SEVA KENDRA</small></div></div>
+<a href="shop.html" class="home-btn">← Shop</a>
+</header>
+<main class="order-wrap">
+<section class="order-hero"><h1>🛒 ऑनलाइन ऑर्डर</h1><p>अपनी जानकारी भरें और WhatsApp के माध्यम से अपना Order भेजें।</p></section>
+<section class="order-card">
+<h2 class="section-title"><span class="section-icon">🛍️</span>Product Details</h2>
+<div class="product-summary">
+<div class="info-box"><label>Product</label><div class="info-value" id="productName">-</div></div>
+<div class="info-box"><label>Price</label><div class="info-value">₹<span id="productPrice">0</span></div></div>
+</div>
+<h2 class="section-title"><span class="section-icon">👤</span>Customer Details</h2>
+<div class="form-grid">
+<div class="form-group"><label for="customerName">आपका नाम *</label><input type="text" id="customerName" placeholder="अपना पूरा नाम लिखें"></div>
+<div class="form-group"><label for="customerMobile">मोबाइल नंबर *</label><input type="tel" id="customerMobile" placeholder="10 अंकों का मोबाइल नंबर"></div>
+<div class="form-group"><label for="quantity">Quantity</label><input type="number" id="quantity" value="1" min="1" onchange="calculateTotal()"></div>
+<div class="form-group"><label>Order Type</label><input type="text" value="WhatsApp Order" readonly></div>
+</div>
+<div class="total-box"><span>कुल अनुमानित राशि</span><strong>₹<span id="totalPrice">0</span></strong></div>
+<button class="whatsapp-btn" onclick="placeOrder()">🟢 WhatsApp पर Order करें</button>
+<div class="note">* नाम और मोबाइल नंबर भरना आवश्यक है।<br>Button दबाने के बाद आपका Order WhatsApp पर भेजने के लिए खुलेगा।</div>
+</section>
+</main>
+<footer class="order-footer"><strong>Singh Photostat & Jan Seva Kendra</strong><br>आपकी सभी ऑनलाइन और डिजिटल सेवाओं का भरोसेमंद केंद्र।</footer>
 <script>
 
 let params = new URLSearchParams(window.location.search);
@@ -61,15 +69,15 @@ let params = new URLSearchParams(window.location.search);
 let product = params.get("product");
 let price = params.get("price");
 
-document.getElementById("productName").value = product || "";
-document.getElementById("productPrice").value = price || "";
+document.getElementById("productName").innerText = product || "-";
+document.getElementById("productPrice").innerText = price || "0";
 
 calculateTotal();
 
 
 function calculateTotal(){
 
-    let price = Number(document.getElementById("productPrice").value) || 0;
+    let price = Number(document.getElementById("productPrice").innerText) || 0;
 
     let quantity = Number(document.getElementById("quantity").value) || 1;
 
@@ -84,8 +92,8 @@ function placeOrder(){
 
     let name = document.getElementById("customerName").value;
     let mobile = document.getElementById("customerMobile").value;
-    let product = document.getElementById("productName").value;
-    let price = document.getElementById("productPrice").value;
+    let product = document.getElementById("productName").innerText;
+    let price = document.getElementById("productPrice").innerText;
     let quantity = document.getElementById("quantity").value;
     let total = document.getElementById("totalPrice").innerText;
 
@@ -122,4 +130,6 @@ function placeOrder(){
 
 </body>
 
+</html>
+</body>
 </html>
