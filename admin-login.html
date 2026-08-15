@@ -36,6 +36,11 @@
             Login
         </button>
 
+        <button id="forgotButton" type="button"
+                style="margin-top:10px;">
+            Forgot Password?
+        </button>
+
     </div>
 
 
@@ -48,8 +53,9 @@
         import {
             getAuth,
             signInWithEmailAndPassword,
+            sendPasswordResetEmail,
             setPersistence,
-            browserLocalPersistence
+            browserSessionPersistence
         }
         from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -99,7 +105,7 @@
 
             setPersistence(
                 auth,
-                browserLocalPersistence
+                browserSessionPersistence
             )
 
             .then(function () {
@@ -114,6 +120,8 @@
 
             .then(function () {
 
+                sessionStorage.setItem("adminAuthenticated", "true");
+
                 alert("Login Successful");
 
                 window.location.href = "admin.html";
@@ -121,6 +129,8 @@
             })
 
             .catch(function (error) {
+
+                sessionStorage.removeItem("adminAuthenticated");
 
                 console.error(error);
 
@@ -133,6 +143,27 @@
 
             });
 
+        });
+
+        document.getElementById("forgotButton")
+        .addEventListener("click", function () {
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            if (!email) {
+                alert("Please enter your registered Admin Email first.");
+                return;
+            }
+
+            sendPasswordResetEmail(auth, email)
+                .then(function () {
+                    alert("Password reset link has been sent to your registered email.");
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    alert("Password reset failed: " + error.message);
+                });
         });
 
     </script>

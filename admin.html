@@ -355,6 +355,18 @@
     <div class="admin-user">
         <div>🔐 Administrator</div>
         <small id="adminEmail">Checking login...</small>
+
+        <div style="margin-top:8px;display:flex;gap:7px;justify-content:flex-end;flex-wrap:wrap;">
+            <button type="button" id="changePasswordButton"
+                style="border:0;border-radius:7px;padding:7px 10px;cursor:pointer;font-weight:700;">
+                🔑 Change Password
+            </button>
+
+            <button type="button" id="logoutButton"
+                style="border:0;border-radius:7px;padding:7px 10px;cursor:pointer;font-weight:700;">
+                🚪 Logout
+            </button>
+        </div>
     </div>
 
 </div>
@@ -639,6 +651,37 @@
 </main>
 
 
+<div id="passwordModal"
+     style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+    <div style="width:min(430px,100%);background:#fff;border-radius:14px;padding:24px;box-shadow:0 15px 45px rgba(0,0,0,.25);">
+        <h2 style="margin:0 0 7px;color:#092f70;">Change Password</h2>
+        <p style="margin:0 0 18px;color:#64748b;font-size:13px;">Current password verify करने के बाद नया password set होगा।</p>
+
+        <label style="display:block;margin:10px 0 6px;font-weight:700;">Current Password</label>
+        <input id="currentPassword" type="password" autocomplete="current-password"
+               style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;">
+
+        <label style="display:block;margin:10px 0 6px;font-weight:700;">New Password</label>
+        <input id="newPassword" type="password" autocomplete="new-password"
+               style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;">
+
+        <label style="display:block;margin:10px 0 6px;font-weight:700;">Confirm New Password</label>
+        <input id="confirmPassword" type="password" autocomplete="new-password"
+               style="width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:8px;">
+
+        <div style="display:flex;gap:9px;margin-top:18px;">
+            <button id="savePasswordButton" type="button"
+                    style="flex:1;border:0;border-radius:8px;padding:11px;background:#062d68;color:#fff;font-weight:800;cursor:pointer;">
+                Change Password
+            </button>
+            <button id="cancelPasswordButton" type="button"
+                    style="flex:1;border:1px solid #cbd5e1;border-radius:8px;padding:11px;background:#fff;font-weight:800;cursor:pointer;">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
 <script type="module">
 
 import { initializeApp }
@@ -647,7 +690,11 @@ from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
     getAuth,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut,
+    EmailAuthProvider,
+    reauthenticateWithCredential,
+    updatePassword
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
@@ -1626,33 +1673,48 @@ onAuthStateChanged(
 
     auth,
 
-    function(user) {
+    async function(user) {
 
-        if (user) {
+        const adminSession =
+            sessionStorage.getItem("adminAuthenticated") === "true";
+
+        if (user && adminSession) {
 
             console.log(
                 "Admin logged in:",
                 user.email
             );
 
-
             document.body.style.display =
                 "block";
-
 
             document.getElementById(
                 "adminEmail"
             ).textContent =
                 user.email || "Logged in";
 
-
             showForms();
 
             showServiceItems();
 
-        }
+        } else {
 
-        else {
+            // Remove any old Firebase session that may have been
+            // left over from the previous persistent-login setup.
+            sessionStorage.removeItem(
+                "adminAuthenticated"
+            );
+
+            try {
+                if (user) {
+                    await signOut(auth);
+                }
+            } catch (error) {
+                console.error(
+                    "Sign-out during auth guard:",
+                    error
+                );
+            }
 
             window.location.replace(
                 "admin-login.html"
@@ -1665,114 +1727,103 @@ onAuthStateChanged(
 );
 
 
-
 /* =========================
-   PIN / UNPIN FORM
+   LOGOUT + CHANGE PASSWORD
 ========================= */
 
-window.toggleFormPin =
-async function(id, currentlyPinned) {
+const passwordModal = document.getElementById("passwordModal");
+const changePasswordButton = document.getElementById("changePasswordButton");
+const logoutButton = document.getElementById("logoutButton");
+
+if (changePasswordButton) {
+    changePasswordButton.addEventListener("click", function () {
+        passwordModal.style.display = "flex";
+    });
+}
+
+document.getElementById("cancelPasswordButton").addEventListener("click", function () {
+    passwordModal.style.display = "none";
+    document.getElementById("currentPassword").value = "";
+    document.getElementById("newPassword").value = "";
+    document.getElementById("confirmPassword").value = "";
+});
+
+if (logoutButton) {
+    logoutButton.addEventListener("click", async function () {
+        if (!confirm("क्या आप Admin Panel से Logout करना चाहते हैं?")) return;
+
+        try {
+            sessionStorage.removeItem("adminAuthenticated");
+            await signOut(auth);
+            window.location.replace("admin-login.html");
+        } catch (error) {
+            console.error(error);
+            alert("Logout failed: " + error.message);
+        }
+    });
+}
+
+document.getElementById("savePasswordButton").addEventListener("click", async function () {
+
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    const user = auth.currentUser;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        alert("कृपया सभी password fields भरें।");
+        return;
+    }
+
+    if (newPassword.length < 6) {
+        alert("New password कम से कम 6 characters का होना चाहिए।");
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        alert("New Password और Confirm Password समान नहीं हैं।");
+        return;
+    }
+
+    if (!user || !user.email) {
+        alert("Admin session नहीं मिला। कृपया दोबारा login करें।");
+        return;
+    }
 
     try {
-
-        if (currentlyPinned) {
-
-            await updateDoc(
-
-                doc(db, "forms", id),
-
-                {
-                    pinned: false
-                }
-
-            );
-
-
-            alert(
-                "Form Unpinned Successfully"
-            );
-
-
-            showForms();
-
-            return;
-
-        }
-
-
-        const querySnapshot =
-            await getDocs(
-                collection(db, "forms")
-            );
-
-
-        let pinnedCount = 0;
-
-
-        querySnapshot.forEach(
-
-            function(documentSnapshot) {
-
-                const form =
-                    documentSnapshot.data();
-
-
-                if (form.pinned === true) {
-
-                    pinnedCount++;
-
-                }
-
-            }
-
+        const credential = EmailAuthProvider.credential(
+            user.email,
+            currentPassword
         );
 
+        await reauthenticateWithCredential(user, credential);
+        await updatePassword(user, newPassword);
 
-        if (pinnedCount >= 3) {
+        alert("Password successfully changed.");
+        passwordModal.style.display = "none";
 
-            alert(
-                "Home Page पर अधिकतम 3 forms ही pin किए जा सकते हैं। पहले किसी form को Unpin करें।"
-            );
+        document.getElementById("currentPassword").value = "";
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
 
-            return;
-
-        }
-
-
-        await updateDoc(
-
-            doc(db, "forms", id),
-
-            {
-                pinned: true
-            }
-
-        );
-
-
-        alert(
-            "Form Pinned to Home Successfully"
-        );
-
-
-        showForms();
-
-    }
-
-    catch(error) {
-
+    } catch (error) {
         console.error(error);
 
-        alert(
-            "Pin/Unpin failed: " +
-            error.message
-        );
-
+        if (error.code === "auth/wrong-password" ||
+            error.code === "auth/invalid-credential") {
+            alert("Current Password गलत है।");
+        } else if (error.code === "auth/weak-password") {
+            alert("New Password बहुत weak है।");
+        } else {
+            alert("Password change failed: " + error.message);
+        }
     }
-
-};
+});
 
 </script>
+
+
+
 
 </body>
 </html>
