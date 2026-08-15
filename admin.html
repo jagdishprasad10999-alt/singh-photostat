@@ -423,6 +423,17 @@
                         placeholder="Additional information">
                 </div>
 
+                <div class="admin-field">
+                    <label>Apply Now Link</label>
+                    <input
+                        type="url"
+                        id="formApplyLink"
+                        placeholder="https://example.com/apply">
+                    <small style="color:#6b7b90;display:block;margin-top:5px;">
+                        Customer के Apply Now button पर यही link खुलेगा।
+                    </small>
+                </div>
+
 
                 <button
                     class="admin-primary"
@@ -712,6 +723,9 @@ window.saveForm = async function() {
         remark:
             document.getElementById("formRemark").value.trim(),
 
+        applyLink:
+            document.getElementById("formApplyLink").value.trim(),
+
         pinned: false
 
     };
@@ -723,6 +737,14 @@ window.saveForm = async function() {
 
         return;
 
+    }
+
+    if (
+        newForm.applyLink &&
+        !/^https?:\/\//i.test(newForm.applyLink)
+    ) {
+        alert("Apply Now Link must start with http:// or https://");
+        return;
     }
 
 
@@ -742,6 +764,7 @@ window.saveForm = async function() {
         document.getElementById("formGovtFee").value = "";
         document.getElementById("formServiceFee").value = "";
         document.getElementById("formRemark").value = "";
+        document.getElementById("formApplyLink").value = "";
 
 
         showForms();
@@ -844,6 +867,11 @@ window.showForms = async function() {
 
                                     Remark:
                                     ${form.remark || "-"}
+
+                                    <br>
+
+                                    Apply Link:
+                                    ${form.applyLink || "Not set"}
 
                                 </p>
 
@@ -1065,6 +1093,22 @@ window.editForm = async function(id) {
 
         if (remark === null) return;
 
+        const applyLink =
+            prompt(
+                "Apply Now Link (https://...)",
+                selectedForm.applyLink || ""
+            );
+
+        if (applyLink === null) return;
+
+        if (
+            applyLink &&
+            !/^https?:\/\//i.test(applyLink)
+        ) {
+            alert("Apply Now Link must start with http:// or https://");
+            return;
+        }
+
 
         await updateDoc(
 
@@ -1076,7 +1120,8 @@ window.editForm = async function(id) {
                 date: date,
                 govtFee: govtFee,
                 serviceFee: serviceFee,
-                remark: remark
+                remark: remark,
+                applyLink: applyLink
 
             }
 

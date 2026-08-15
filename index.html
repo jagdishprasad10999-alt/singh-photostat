@@ -8,6 +8,18 @@
     <title>Singh Photostat & Jan Seva Kendra</title>
 
     <link rel="stylesheet" href="style.css">
+
+<style>
+.form-card{display:grid!important;grid-template-columns:70px minmax(150px,1.35fr) repeat(4,minmax(90px,1fr)) 165px!important;align-items:center!important;gap:0!important}
+.form-card .form-actions{display:flex!important;flex-direction:column!important;gap:8px!important;align-items:stretch!important;justify-content:center!important}
+.form-card .form-actions a{display:block!important;text-align:center!important;width:100%!important;text-decoration:none!important}
+.form-card .form-actions .apply-btn,.form-card .form-actions .whatsapp-btn{position:relative!important;z-index:20!important;pointer-events:auto!important;cursor:pointer!important}
+.form-card .form-actions a:first-child{background:#0b57b7!important;color:#fff!important}
+.form-card .form-actions a:last-child{background:#fff!important;color:#16833f!important;border:1px solid #16833f!important}
+@media(max-width:900px){.form-card{grid-template-columns:60px 1fr 1fr!important;gap:12px!important;padding:15px!important}.form-card .form-actions{grid-column:1/-1!important;flex-direction:row!important}}
+@media(max-width:600px){.form-card{grid-template-columns:1fr 1fr!important}.form-card .form-actions{grid-column:1/-1!important;flex-direction:column!important}}
+</style>
+
 </head>
 
 <body>
@@ -16,15 +28,19 @@
 
 <div class="top-bar">
 
-    <div class="top-left">
+    <div class="top-contact">
+    <span>📞 8650515172</span>
+    <span class="divider">|</span>
+    <span>📍 Kasganj, Uttar Pradesh</span>
+    <span class="divider">|</span>
 
-        <span>📞 8650515172</span>
-
-        <span class="separator">|</span>
-
-        <span>📍 Kasganj, Uttar Pradesh</span>
-
-    </div>
+    <a
+        href="https://maps.app.goo.gl/v8TcRcJTWXKt3r3k7?g_st=aw"
+        target="_blank"
+        class="location-link">
+        🗺️ Location
+    </a>
+</div>
 
     <a
         href="https://wa.me/918650515172"
@@ -1177,25 +1193,32 @@ async function loadForms() {
                     <div class="form-actions">
 
 
+${
+    (form.applyLink || "").trim()
+    ?
+    `<a
+        href="${(form.applyLink || "").trim()}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="apply-btn"
+        onclick="event.stopPropagation();">
+        Apply Now
+    </a>`
+    :
+    `<span class="apply-unavailable">
+        Link जल्द ही प्रसारित की जाएगी
+    </span>`
+}
+
                         <a
-                            href="online-forms.html">
-
-                            Apply Now
-
-                        </a>
-
-
-                        <a
-                            href="https://wa.me/918650515172?text=${encodeURIComponent(
-                                "मुझे " +
-                                form.name +
-                                " के बारे में जानकारी चाहिए।"
-                            )}"
-                            target="_blank">
-
-                            🟢 WhatsApp पर जानकारी लें
-
-                        </a>
+    href="https://wa.me/918650515172?text=${encodeURIComponent(
+        'मुझे ' + form.name + ' के बारे में जानकारी चाहिए'
+    )}"
+    target="_blank"
+    class="whatsapp-btn"
+>
+    🟢 WhatsApp पर जानकारी लें
+</a>
 
 
                     </div>
