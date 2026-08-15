@@ -774,14 +774,23 @@ async function loadForms() {
 
                         <td class="form-action-cell">
 
-                            <a
-                                href="https://wa.me/918650515172?text=${whatsappMessage}"
-                                target="_blank"
-                                class="apply-button">
+                            ${
+                                form.applyLink
+                                ?
+                                `<a
+                                    href="${form.applyLink}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="apply-button">
 
-                                जानकारी / Apply
+                                    Apply Now
 
-                            </a>
+                                </a>`
+                                :
+                                `<span class="apply-unavailable">
+                                    Link जल्द ही प्रसारित की जाएगी
+                                </span>`
+                            }
 
 
                             <br>
@@ -790,6 +799,7 @@ async function loadForms() {
                             <a
                                 href="https://wa.me/918650515172?text=${whatsappMessage}"
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 class="whatsapp-form-button">
 
                                 🟢 WhatsApp
