@@ -1,227 +1,647 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Admin Panel - Singh Photostat</title>
 
     <link rel="stylesheet" href="style.css">
 
+    <style>
+        body.admin-page {
+            display: none;
+            background: #f4f7fb;
+        }
+
+        .admin-topbar {
+            background: #062d68;
+            color: #fff;
+            padding: 10px 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-brand img {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            background: #fff;
+            border-radius: 9px;
+            padding: 3px;
+        }
+
+        .admin-brand strong {
+            display: block;
+            font-size: 20px;
+        }
+
+        .admin-brand span {
+            display: block;
+            font-size: 11px;
+            opacity: .8;
+        }
+
+        .admin-user {
+            text-align: right;
+        }
+
+        .admin-container {
+            width: 94%;
+            max-width: 1250px;
+            margin: 28px auto 50px;
+        }
+
+        .admin-title {
+            margin-bottom: 22px;
+        }
+
+        .admin-title h1 {
+            margin: 0;
+            color: #092f70;
+            font-size: 31px;
+        }
+
+        .admin-title p {
+            margin: 7px 0 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .admin-card {
+            background: #fff;
+            border: 1px solid #dfe5ed;
+            border-radius: 13px;
+            box-shadow: 0 6px 20px rgba(0,35,80,.07);
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .admin-card h2 {
+            margin: 0 0 6px;
+            color: #092f70;
+            font-size: 21px;
+        }
+
+        .admin-card > p {
+            margin: 0 0 18px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .admin-section-icon {
+            display: inline-grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .blue-icon {
+            background: #e8f2ff;
+        }
+
+        .green-icon {
+            background: #e8f8ed;
+        }
+
+        .orange-icon {
+            background: #fff0e5;
+        }
+
+        .admin-field {
+            margin-bottom: 14px;
+        }
+
+        .admin-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #24344d;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .admin-field input,
+        .admin-field select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #cfd8e5;
+            border-radius: 7px;
+            outline: none;
+            background: #fff;
+            color: #24344d;
+            font-size: 13px;
+        }
+
+        .admin-field input:focus,
+        .admin-field select:focus {
+            border-color: #0755ad;
+            box-shadow: 0 0 0 3px rgba(7,85,173,.08);
+        }
+
+        .admin-primary {
+            width: 100%;
+            border: 0;
+            background: #0755ad;
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 7px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .admin-primary:hover {
+            background: #06478f;
+        }
+
+        .admin-secondary {
+            display: inline-block;
+            background: #062d68;
+            color: #fff;
+            text-decoration: none;
+            padding: 11px 16px;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .admin-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .admin-item {
+            border: 1px solid #dfe6ef;
+            border-radius: 9px;
+            padding: 14px;
+            background: #fbfdff;
+        }
+
+        .admin-item-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .admin-item h3 {
+            margin: 0;
+            color: #092f70;
+            font-size: 15px;
+        }
+
+        .admin-item p {
+            margin: 6px 0 0;
+            color: #526175;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .admin-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 12px;
+        }
+
+        .admin-actions button {
+            border: 0;
+            padding: 8px 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .edit-btn {
+            background: #e8f2ff;
+            color: #0755ad;
+        }
+
+        .delete-btn {
+            background: #ffeaea;
+            color: #c62828;
+        }
+
+        .pin-btn {
+            background: #fff2d9;
+            color: #a46500;
+        }
+
+        .pinned-label {
+            display: inline-block;
+            background: #e7f7ec;
+            color: #16843b;
+            padding: 4px 7px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .admin-service-list {
+            margin-top: 15px;
+        }
+
+        .admin-service-select {
+            margin-bottom: 16px;
+        }
+
+        .service-item-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .manage-products-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px;
+            background: #f5f9ff;
+            border: 1px solid #dbe8f7;
+            border-radius: 9px;
+        }
+
+        .manage-products-box strong {
+            color: #092f70;
+            font-size: 14px;
+        }
+
+        .admin-empty {
+            padding: 18px;
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 950px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .admin-topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .admin-user {
+                text-align: left;
+            }
+
+            .admin-container {
+                width: 92%;
+            }
+
+            .admin-card {
+                padding: 17px;
+            }
+
+            .admin-item-head {
+                flex-direction: column;
+            }
+
+            .manage-products-box {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .admin-secondary {
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 
+<body class="admin-page">
 
-<body style="display:none;">
+<div class="admin-topbar">
 
+    <div class="admin-brand">
 
-<h1>Admin Panel</h1>
+        <img src="singh-logo-crop.png" alt="Singh Logo">
 
+        <div>
+            <strong>Singh Photostat</strong>
+            <span>Admin Management Panel</span>
+        </div>
 
-<!-- =========================
-     FORM MANAGEMENT
-========================= -->
+    </div>
 
-<div class="card">
-
-    <h3>नया फॉर्म जोड़ें</h3>
-
-
-    <label>फॉर्म का नाम:</label>
-    <br>
-
-    <input type="text" id="formName">
-
-
-    <br><br>
-
-
-    <label>अंतिम तारीख:</label>
-    <br>
-
-    <input type="text" id="formDate">
-
-
-    <br><br>
-
-
-    <label>सरकारी फीस:</label>
-    <br>
-
-    <input type="text" id="formGovtFee">
-
-
-    <br><br>
-
-
-    <label>फीस:</label>
-    <br>
-
-    <input type="text" id="formServiceFee">
-
-
-    <br><br>
-
-
-    <label>Remark:</label>
-    <br>
-
-    <input
-        type="text"
-        id="formRemark"
-        placeholder="Additional information">
-
-
-    <br><br>
-
-
-    <button onclick="saveForm()">
-        Save Form
-    </button>
-
-
-    <h2>Added Forms</h2>
-
-
-    <div id="formList"></div>
+    <div class="admin-user">
+        <div>🔐 Administrator</div>
+        <small id="adminEmail">Checking login...</small>
+    </div>
 
 </div>
 
 
+<main class="admin-container">
 
-<br><br>
-
-
-
-<!-- =========================
-     SERVICE MANAGEMENT
-========================= -->
-
-<div class="card">
-
-    <h2>Manage Services</h2>
+    <div class="admin-title">
+        <h1>Admin Panel</h1>
+        <p>Forms, services और homepage content को यहाँ से manage करें।</p>
+    </div>
 
 
-    <label>Service चुनें:</label>
-
-    <br><br>
+    <div class="admin-grid">
 
 
-    <select id="serviceSelect">
+        <!-- LEFT SIDE: ADD -->
 
-        <option value="photoPrinting">
-            फोटो और प्रिंटिंग
-        </option>
-
-        <option value="laminationCards">
-            लैमिनेशन, कार्ड और Accessories
-        </option>
-
-        <option value="janSeva">
-            जन सेवा केंद्र
-        </option>
-
-        <option value="kisanSeva">
-            किसान सेवाएँ
-        </option>
-
-    </select>
+        <div>
 
 
-    <br><br>
+            <!-- ADD FORM -->
+
+            <section class="admin-card">
+
+                <div class="admin-section-icon blue-icon">
+                    📄
+                </div>
+
+                <h2>नया फॉर्म जोड़ें</h2>
+
+                <p>
+                    नया online form और उसकी fee/details जोड़ें।
+                </p>
 
 
-    <label>Description:</label>
-
-    <br>
-
-    <input
-        type="text"
-        id="serviceDescription"
-        placeholder="Service description">
+                <div class="admin-field">
+                    <label>फॉर्म का नाम</label>
+                    <input type="text" id="formName" placeholder="जैसे: Scholarship Form">
+                </div>
 
 
-    <br><br>
+                <div class="admin-field">
+                    <label>अंतिम तारीख</label>
+                    <input type="text" id="formDate" placeholder="जैसे: 30/09/2026">
+                </div>
 
 
-    <label>Price:</label>
-
-    <br>
-
-    <input
-        type="text"
-        id="servicePrice"
-        placeholder="₹ Price">
+                <div class="admin-field">
+                    <label>सरकारी फीस</label>
+                    <input type="text" id="formGovtFee" placeholder="₹ Government Fee">
+                </div>
 
 
-    <br><br>
+                <div class="admin-field">
+                    <label>हमारी फीस</label>
+                    <input type="text" id="formServiceFee" placeholder="₹ Service Fee">
+                </div>
 
 
-    <label>Remark:</label>
-
-    <br>
-
-    <input
-        type="text"
-        id="serviceRemark"
-        placeholder="Additional information">
-
-
-    <br><br>
+                <div class="admin-field">
+                    <label>Remark</label>
+                    <input
+                        type="text"
+                        id="formRemark"
+                        placeholder="Additional information">
+                </div>
 
 
-    <button onclick="saveServiceItem()">
-        Add Service Item
-    </button>
+                <button
+                    class="admin-primary"
+                    onclick="saveForm()">
 
+                    + Save Form
 
-    <h2>Added Service Items</h2>
+                </button>
 
-
-    <div id="serviceList"></div>
-
-</div>
+            </section>
 
 
 
-<br><br>
+            <!-- ADD SERVICE -->
+
+            <section class="admin-card">
+
+                <div class="admin-section-icon green-icon">
+                    ⚙️
+                </div>
+
+                <h2>Service Management</h2>
+
+                <p>
+                    अलग-अलग services की fee और details manage करें।
+                </p>
+
+
+                <div class="admin-field">
+
+                    <label>
+                        Service चुनें
+                    </label>
+
+                    <select id="serviceSelect">
+
+                        <option value="photoPrinting">
+                            फोटो और प्रिंटिंग
+                        </option>
+
+                        <option value="laminationCards">
+                            लैमिनेशन, कार्ड और Accessories
+                        </option>
+
+                        <option value="janSeva">
+                            जन सेवा केंद्र
+                        </option>
+
+                        <option value="kisanSeva">
+                            किसान सेवाएँ
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="admin-field">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <input
+                        type="text"
+                        id="serviceDescription"
+                        placeholder="Service description">
+
+                </div>
+
+
+                <div class="admin-field">
+
+                    <label>
+                        Price
+                    </label>
+
+                    <input
+                        type="text"
+                        id="servicePrice"
+                        placeholder="₹ Price">
+
+                </div>
+
+
+                <div class="admin-field">
+
+                    <label>
+                        Remark
+                    </label>
+
+                    <input
+                        type="text"
+                        id="serviceRemark"
+                        placeholder="Additional information">
+
+                </div>
+
+
+                <button
+                    class="admin-primary"
+                    onclick="saveServiceItem()">
+
+                    + Add Service Item
+
+                </button>
+
+            </section>
 
 
 
-<!-- =========================
-     PRODUCT MANAGEMENT
-========================= -->
+            <!-- PRODUCTS -->
 
-<a href="product-admin.html">
+            <section class="admin-card">
 
-    <button>
-        Manage Products
-    </button>
+                <div class="admin-section-icon orange-icon">
+                    🛍️
+                </div>
 
-</a>
+                <h2>Product Management</h2>
 
+                <p>
+                    Products के लिए अलग management panel खोलें।
+                </p>
+
+                <div class="manage-products-box">
+
+                    <strong>
+                        Products, Images & Pin/Unpin
+                    </strong>
+
+                    <a
+                        href="product-admin.html"
+                        class="admin-secondary">
+
+                        Manage Products →
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+
+        <!-- RIGHT SIDE: LISTS -->
+
+        <div>
+
+
+            <!-- FORMS LIST -->
+
+            <section class="admin-card">
+
+                <h2>📋 Added Forms</h2>
+
+                <p>
+                    सभी forms यहाँ से Edit, Delete या Home पर Pin करें।
+                </p>
+
+                <div
+                    id="formList"
+                    class="admin-list">
+
+                    <div class="admin-empty">
+                        Loading forms...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- SERVICES LIST -->
+
+            <section class="admin-card">
+
+                <h2>🧾 Added Service Items</h2>
+
+                <p>
+                    चुनी गई service के सभी items यहाँ दिखेंगे।
+                </p>
+
+                <div
+                    id="serviceList"
+                    class="admin-service-list">
+
+                    <div class="admin-empty">
+                        Loading service items...
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
 
 
 <script type="module">
 
-
 import { initializeApp }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
-
 import {
-
     getAuth,
     onAuthStateChanged
-
 }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 
-
 import {
-
     getFirestore,
     collection,
     addDoc,
@@ -229,11 +649,8 @@ import {
     doc,
     updateDoc,
     deleteDoc
-
 }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
 
 
 const firebaseConfig = {
@@ -259,7 +676,6 @@ const firebaseConfig = {
 };
 
 
-
 const app =
     initializeApp(firebaseConfig);
 
@@ -273,14 +689,11 @@ const db =
 
 
 
-
 /* =========================
    SAVE FORM
 ========================= */
 
-
 window.saveForm = async function() {
-
 
     const newForm = {
 
@@ -298,7 +711,9 @@ window.saveForm = async function() {
 
         remark:
             document.getElementById("formRemark").value.trim(),
+
         pinned: false
+
     };
 
 
@@ -314,11 +729,8 @@ window.saveForm = async function() {
     try {
 
         await addDoc(
-
             collection(db, "forms"),
-
             newForm
-
         );
 
 
@@ -326,18 +738,13 @@ window.saveForm = async function() {
 
 
         document.getElementById("formName").value = "";
-
         document.getElementById("formDate").value = "";
-
         document.getElementById("formGovtFee").value = "";
-
         document.getElementById("formServiceFee").value = "";
-
         document.getElementById("formRemark").value = "";
 
 
         showForms();
-
 
     }
 
@@ -346,8 +753,8 @@ window.saveForm = async function() {
         console.error(error);
 
         alert(
-            "Form save failed: "
-            + error.message
+            "Form save failed: " +
+            error.message
         );
 
     }
@@ -356,31 +763,25 @@ window.saveForm = async function() {
 
 
 
-
 /* =========================
    SHOW FORMS
 ========================= */
 
-
 window.showForms = async function() {
-
 
     const list =
         document.getElementById("formList");
 
 
     list.innerHTML =
-        "<p>Loading forms...</p>";
+        "<div class='admin-empty'>Loading forms...</div>";
 
 
     try {
 
-
         const querySnapshot =
             await getDocs(
-
                 collection(db, "forms")
-
             );
 
 
@@ -390,7 +791,7 @@ window.showForms = async function() {
         if (querySnapshot.empty) {
 
             list.innerHTML =
-                "<p>No forms added yet.</p>";
+                "<div class='admin-empty'>No forms added yet.</div>";
 
             return;
 
@@ -404,7 +805,6 @@ window.showForms = async function() {
 
             function(documentSnapshot) {
 
-
                 const form =
                     documentSnapshot.data();
 
@@ -413,65 +813,91 @@ window.showForms = async function() {
                     documentSnapshot.id;
 
 
+                const pinned =
+                    form.pinned === true;
+
+
                 list.innerHTML += `
 
-                    <div class="card">
+                    <div class="admin-item">
 
-                        <h3>
-                            ${srNo}. ${form.name}
-                        </h3>
+                        <div class="admin-item-head">
 
-                        <p>
-                            अंतिम तारीख:
-                            ${form.date}
-                        </p>
+                            <div>
 
-                        <p>
-                            सरकारी फीस:
-                            ₹${form.govtFee}
-                        </p>
+                                <h3>
+                                    ${srNo}. ${form.name || "-"}
+                                </h3>
 
-                        <p>
-                            फीस:
-                            ₹${form.serviceFee}
-                        </p>
+                                <p>
+                                    📅 अंतिम तारीख:
+                                    ${form.date || "-"}
+                                    <br>
 
-                        <p>
-                            Remark:
-                            ${form.remark || "-"}
-                        </p>
+                                    सरकारी फीस:
+                                    ₹${form.govtFee || "-"}
+                                    &nbsp; | &nbsp;
+
+                                    हमारी फीस:
+                                    ₹${form.serviceFee || "-"}
+                                    <br>
+
+                                    Remark:
+                                    ${form.remark || "-"}
+
+                                </p>
+
+                            </div>
+
+                            ${
+                                pinned
+                                ?
+                                `<span class="pinned-label">
+                                    📌 HOME PINNED
+                                </span>`
+                                :
+                                ""
+                            }
+
+                        </div>
 
 
-                        <button
-                            onclick="editForm('${id}')">
+                        <div class="admin-actions">
 
-                            Edit
+                            <button
+                                class="edit-btn"
+                                onclick="editForm('${id}')">
 
-                        </button>
+                                ✏️ Edit
+
+                            </button>
 
 
-                        <button
-                            onclick="deleteForm('${id}')">
+                            <button
+                                class="delete-btn"
+                                onclick="deleteForm('${id}')">
 
-                            Delete
+                                🗑️ Delete
 
-                        </button>
+                            </button>
 
-<br><br>
 
-<button
-    onclick="toggleFormPin(
-        '${id}',
-        ${form.pinned === true}
-    )">
+                            <button
+                                class="pin-btn"
+                                onclick="toggleFormPin(
+                                    '${id}',
+                                    ${pinned}
+                                )">
 
-    ${
-        form.pinned === true
-        ? "📌 Pinned — Unpin"
-        : "📌 Pin to Home"
-    }
+                                ${
+                                    pinned
+                                    ? "📌 Unpin from Home"
+                                    : "📌 Pin to Home"
+                                }
 
-</button>
+                            </button>
+
+                        </div>
 
                     </div>
 
@@ -484,7 +910,6 @@ window.showForms = async function() {
 
         );
 
-
     }
 
     catch(error) {
@@ -492,7 +917,7 @@ window.showForms = async function() {
         console.error(error);
 
         list.innerHTML =
-            "<p>Forms load failed.</p>";
+            "<div class='admin-empty'>Forms load failed.</div>";
 
     }
 
@@ -500,14 +925,11 @@ window.showForms = async function() {
 
 
 
-
 /* =========================
    DELETE FORM
 ========================= */
 
-
 window.deleteForm = async function(id) {
-
 
     if (
         !confirm(
@@ -522,11 +944,8 @@ window.deleteForm = async function(id) {
 
     try {
 
-
         await deleteDoc(
-
             doc(db, "forms", id)
-
         );
 
 
@@ -537,7 +956,6 @@ window.deleteForm = async function(id) {
 
         showForms();
 
-
     }
 
     catch(error) {
@@ -545,8 +963,8 @@ window.deleteForm = async function(id) {
         console.error(error);
 
         alert(
-            "Delete failed: "
-            + error.message
+            "Delete failed: " +
+            error.message
         );
 
     }
@@ -555,23 +973,17 @@ window.deleteForm = async function(id) {
 
 
 
-
 /* =========================
    EDIT FORM
 ========================= */
 
-
 window.editForm = async function(id) {
-
 
     try {
 
-
         const querySnapshot =
             await getDocs(
-
                 collection(db, "forms")
-
             );
 
 
@@ -579,14 +991,11 @@ window.editForm = async function(id) {
 
 
         querySnapshot.forEach(
-
             function(documentSnapshot) {
-
 
                 if (
                     documentSnapshot.id === id
                 ) {
-
 
                     selectedForm = {
 
@@ -600,7 +1009,6 @@ window.editForm = async function(id) {
                 }
 
             }
-
         );
 
 
@@ -619,7 +1027,6 @@ window.editForm = async function(id) {
                 selectedForm.name
             );
 
-
         if (name === null) return;
 
 
@@ -628,7 +1035,6 @@ window.editForm = async function(id) {
                 "Last Date",
                 selectedForm.date
             );
-
 
         if (date === null) return;
 
@@ -639,7 +1045,6 @@ window.editForm = async function(id) {
                 selectedForm.govtFee
             );
 
-
         if (govtFee === null) return;
 
 
@@ -649,7 +1054,6 @@ window.editForm = async function(id) {
                 selectedForm.serviceFee
             );
 
-
         if (serviceFee === null) return;
 
 
@@ -658,7 +1062,6 @@ window.editForm = async function(id) {
                 "Remark",
                 selectedForm.remark || ""
             );
-
 
         if (remark === null) return;
 
@@ -670,13 +1073,9 @@ window.editForm = async function(id) {
             {
 
                 name: name,
-
                 date: date,
-
                 govtFee: govtFee,
-
                 serviceFee: serviceFee,
-
                 remark: remark
 
             }
@@ -691,7 +1090,6 @@ window.editForm = async function(id) {
 
         showForms();
 
-
     }
 
     catch(error) {
@@ -699,8 +1097,8 @@ window.editForm = async function(id) {
         console.error(error);
 
         alert(
-            "Edit failed: "
-            + error.message
+            "Edit failed: " +
+            error.message
         );
 
     }
@@ -709,14 +1107,11 @@ window.editForm = async function(id) {
 
 
 
-
 /* =========================
    SAVE SERVICE ITEM
 ========================= */
 
-
 window.saveServiceItem = async function() {
-
 
     const serviceId =
         document.getElementById(
@@ -766,7 +1161,6 @@ window.saveServiceItem = async function() {
 
     try {
 
-
         await addDoc(
 
             collection(
@@ -779,9 +1173,7 @@ window.saveServiceItem = async function() {
             {
 
                 description: description,
-
                 price: price,
-
                 remark: remark
 
             }
@@ -811,7 +1203,6 @@ window.saveServiceItem = async function() {
 
         showServiceItems();
 
-
     }
 
     catch(error) {
@@ -819,8 +1210,8 @@ window.saveServiceItem = async function() {
         console.error(error);
 
         alert(
-            "Service save failed: "
-            + error.message
+            "Service save failed: " +
+            error.message
         );
 
     }
@@ -829,14 +1220,11 @@ window.saveServiceItem = async function() {
 
 
 
-
 /* =========================
    SHOW SERVICE ITEMS
 ========================= */
 
-
 window.showServiceItems = async function() {
-
 
     const serviceId =
         document.getElementById(
@@ -851,11 +1239,10 @@ window.showServiceItems = async function() {
 
 
     list.innerHTML =
-        "<p>Loading...</p>";
+        "<div class='admin-empty'>Loading...</div>";
 
 
     try {
-
 
         const querySnapshot =
             await getDocs(
@@ -876,7 +1263,7 @@ window.showServiceItems = async function() {
         if (querySnapshot.empty) {
 
             list.innerHTML =
-                "<p>No service items added yet.</p>";
+                "<div class='admin-empty'>No service items added yet.</div>";
 
             return;
 
@@ -890,7 +1277,6 @@ window.showServiceItems = async function() {
 
             function(documentSnapshot) {
 
-
                 const item =
                     documentSnapshot.data();
 
@@ -901,48 +1287,61 @@ window.showServiceItems = async function() {
 
                 list.innerHTML += `
 
-                    <div class="card">
+                    <div class="admin-item">
 
-                        <h3>
-                            ${srNo}.
-                            ${item.description}
-                        </h3>
+                        <div class="admin-item-head">
 
-                        <p>
-                            Price:
-                            ₹${item.price}
-                        </p>
+                            <div>
 
-                        <p>
-                            Remark:
-                            ${item.remark || "-"}
-                        </p>
+                                <h3>
+                                    ${srNo}. ${item.description || "-"}
+                                </h3>
 
+                                <p>
+                                    💰 Price:
+                                    ₹${item.price || "-"}
+                                    <br>
 
-                        <button
-                            onclick="
-                                editServiceItem(
-                                    '${serviceId}',
-                                    '${id}'
-                                )
-                            ">
+                                    Remark:
+                                    ${item.remark || "-"}
 
-                            Edit
+                                </p>
 
-                        </button>
+                            </div>
+
+                        </div>
 
 
-                        <button
-                            onclick="
-                                deleteServiceItem(
-                                    '${serviceId}',
-                                    '${id}'
-                                )
-                            ">
+                        <div class="admin-actions">
 
-                            Delete
+                            <button
+                                class="edit-btn"
+                                onclick="
+                                    editServiceItem(
+                                        '${serviceId}',
+                                        '${id}'
+                                    )
+                                ">
 
-                        </button>
+                                ✏️ Edit
+
+                            </button>
+
+
+                            <button
+                                class="delete-btn"
+                                onclick="
+                                    deleteServiceItem(
+                                        '${serviceId}',
+                                        '${id}'
+                                    )
+                                ">
+
+                                🗑️ Delete
+
+                            </button>
+
+                        </div>
 
                     </div>
 
@@ -955,7 +1354,6 @@ window.showServiceItems = async function() {
 
         );
 
-
     }
 
     catch(error) {
@@ -963,7 +1361,7 @@ window.showServiceItems = async function() {
         console.error(error);
 
         list.innerHTML =
-            "<p>Service items load failed.</p>";
+            "<div class='admin-empty'>Service items load failed.</div>";
 
     }
 
@@ -971,18 +1369,14 @@ window.showServiceItems = async function() {
 
 
 
-
 /* =========================
    EDIT SERVICE ITEM
 ========================= */
 
-
 window.editServiceItem =
 async function(serviceId, id) {
 
-
     try {
-
 
         const querySnapshot =
             await getDocs(
@@ -1001,9 +1395,7 @@ async function(serviceId, id) {
 
 
         querySnapshot.forEach(
-
             function(documentSnapshot) {
-
 
                 if (
                     documentSnapshot.id === id
@@ -1018,7 +1410,6 @@ async function(serviceId, id) {
                 }
 
             }
-
         );
 
 
@@ -1039,7 +1430,6 @@ async function(serviceId, id) {
                 selectedItem.description
             );
 
-
         if (description === null) return;
 
 
@@ -1049,7 +1439,6 @@ async function(serviceId, id) {
                 selectedItem.price
             );
 
-
         if (price === null) return;
 
 
@@ -1058,7 +1447,6 @@ async function(serviceId, id) {
                 "Remark",
                 selectedItem.remark || ""
             );
-
 
         if (remark === null) return;
 
@@ -1076,9 +1464,7 @@ async function(serviceId, id) {
             {
 
                 description: description,
-
                 price: price,
-
                 remark: remark
 
             }
@@ -1093,7 +1479,6 @@ async function(serviceId, id) {
 
         showServiceItems();
 
-
     }
 
     catch(error) {
@@ -1101,8 +1486,8 @@ async function(serviceId, id) {
         console.error(error);
 
         alert(
-            "Update failed: "
-            + error.message
+            "Update failed: " +
+            error.message
         );
 
     }
@@ -1111,15 +1496,12 @@ async function(serviceId, id) {
 
 
 
-
 /* =========================
    DELETE SERVICE ITEM
 ========================= */
 
-
 window.deleteServiceItem =
 async function(serviceId, id) {
-
 
     if (
         !confirm(
@@ -1133,7 +1515,6 @@ async function(serviceId, id) {
 
 
     try {
-
 
         await deleteDoc(
 
@@ -1155,7 +1536,6 @@ async function(serviceId, id) {
 
         showServiceItems();
 
-
     }
 
     catch(error) {
@@ -1163,8 +1543,8 @@ async function(serviceId, id) {
         console.error(error);
 
         alert(
-            "Delete failed: "
-            + error.message
+            "Delete failed: " +
+            error.message
         );
 
     }
@@ -1173,11 +1553,9 @@ async function(serviceId, id) {
 
 
 
-
 /* =========================
-   SERVICE SELECTION CHANGE
+   SERVICE SELECTION
 ========================= */
-
 
 document.getElementById(
     "serviceSelect"
@@ -1195,11 +1573,9 @@ document.getElementById(
 
 
 
-
 /* =========================
    LOGIN CHECK
 ========================= */
-
 
 onAuthStateChanged(
 
@@ -1207,9 +1583,7 @@ onAuthStateChanged(
 
     function(user) {
 
-
         if (user) {
-
 
             console.log(
                 "Admin logged in:",
@@ -1221,15 +1595,19 @@ onAuthStateChanged(
                 "block";
 
 
+            document.getElementById(
+                "adminEmail"
+            ).textContent =
+                user.email || "Logged in";
+
+
             showForms();
 
             showServiceItems();
 
-
         }
 
         else {
-
 
             window.location.replace(
                 "admin-login.html"
@@ -1241,11 +1619,14 @@ onAuthStateChanged(
 
 );
 
+
+
 /* =========================
    PIN / UNPIN FORM
 ========================= */
 
-window.toggleFormPin = async function(id, currentlyPinned) {
+window.toggleFormPin =
+async function(id, currentlyPinned) {
 
     try {
 
@@ -1261,11 +1642,16 @@ window.toggleFormPin = async function(id, currentlyPinned) {
 
             );
 
-            alert("Form Unpinned Successfully");
+
+            alert(
+                "Form Unpinned Successfully"
+            );
+
 
             showForms();
 
             return;
+
         }
 
 
@@ -1279,10 +1665,12 @@ window.toggleFormPin = async function(id, currentlyPinned) {
 
 
         querySnapshot.forEach(
+
             function(documentSnapshot) {
 
                 const form =
                     documentSnapshot.data();
+
 
                 if (form.pinned === true) {
 
@@ -1291,6 +1679,7 @@ window.toggleFormPin = async function(id, currentlyPinned) {
                 }
 
             }
+
         );
 
 
@@ -1316,10 +1705,12 @@ window.toggleFormPin = async function(id, currentlyPinned) {
         );
 
 
-        alert("Form Pinned to Home Successfully");
+        alert(
+            "Form Pinned to Home Successfully"
+        );
+
 
         showForms();
-
 
     }
 
@@ -1328,8 +1719,8 @@ window.toggleFormPin = async function(id, currentlyPinned) {
         console.error(error);
 
         alert(
-            "Pin/Unpin failed: "
-            + error.message
+            "Pin/Unpin failed: " +
+            error.message
         );
 
     }
@@ -1338,7 +1729,5 @@ window.toggleFormPin = async function(id, currentlyPinned) {
 
 </script>
 
-
 </body>
-
 </html>

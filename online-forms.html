@@ -1,71 +1,598 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>ऑनलाइन फॉर्म - Singh Photostat</title>
+    <title>नए ऑनलाइन फॉर्म और अपडेट - Singh Photostat</title>
 
     <link rel="stylesheet" href="style.css">
 
     <style>
+        .forms-page-hero {
+            background: linear-gradient(100deg, #eaf4ff, #ffffff);
+            padding: 42px 6%;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            border-bottom: 1px solid #dfe7f2;
+        }
 
-        .service-table {
+        .forms-page-icon {
+            width: 82px;
+            height: 82px;
+            flex: 0 0 82px;
+            border-radius: 18px;
+            background: #e8f2ff;
+            color: #0755ad;
+            display: grid;
+            place-items: center;
+        }
+
+        .forms-page-icon svg {
+            width: 54px;
+            height: 54px;
+        }
+
+        .forms-page-hero h1 {
+            margin: 0 0 8px;
+            color: #092f70;
+            font-size: 38px;
+        }
+
+        .forms-page-hero p {
+            margin: 0;
+            color: #526175;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .forms-page-wrap {
+            width: 94%;
+            max-width: 1200px;
+            margin: 32px auto 45px;
+        }
+
+        .forms-page-heading {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .forms-page-heading h2 {
+            margin: 0 0 7px;
+            color: #092f70;
+            font-size: 28px;
+        }
+
+        .forms-page-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .forms-table-wrap {
+            background: #fff;
+            border: 1px solid #dfe5ed;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,35,80,.08);
+        }
+
+        .forms-table-scroll {
+            overflow-x: auto;
+        }
+
+        .forms-table {
             width: 100%;
+            min-width: 900px;
             border-collapse: collapse;
-            margin-top: 20px;
         }
 
-        .service-table th,
-        .service-table td {
-            border: 1px solid #ccc;
-            padding: 10px;
+        .forms-table th {
+            background: #0755ad;
+            color: #fff;
+            padding: 14px 12px;
             text-align: left;
+            font-size: 13px;
+            white-space: nowrap;
         }
 
-        .service-table th {
-            background: #f2f2f2;
+        .forms-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e7ebf1;
+            color: #34445b;
+            font-size: 13px;
+            vertical-align: middle;
         }
 
+        .forms-table tbody tr:hover {
+            background: #f5f9ff;
+        }
+
+        .forms-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .forms-table td:first-child {
+            width: 70px;
+            text-align: center;
+            font-weight: 800;
+            color: #092f70;
+        }
+
+        .form-name-cell {
+            min-width: 190px;
+            color: #092f70 !important;
+            font-weight: 800;
+        }
+
+        .fee-cell {
+            white-space: nowrap;
+            font-weight: 800;
+            color: #092f70 !important;
+        }
+
+        .remark-cell {
+            min-width: 160px;
+            color: #64748b !important;
+        }
+
+        .form-action-cell {
+            min-width: 155px;
+        }
+
+        .apply-button {
+            display: inline-block;
+            padding: 9px 15px;
+            border-radius: 7px;
+            background: #0755ad;
+            color: #fff;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .whatsapp-form-button {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 7px 10px;
+            border-radius: 6px;
+            background: #fff;
+            border: 1px solid #19a34a;
+            color: #16843b;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .forms-back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #0755ad;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .forms-contact {
+            width: 94%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 22px 30px;
+            background: #062d68;
+            color: #fff;
+            border-radius: 11px 11px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .forms-contact h2 {
+            margin: 0 0 5px;
+            color: #ff8a16;
+            font-size: 22px;
+        }
+
+        .forms-contact p {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .forms-contact a {
+            background: #1aaa42;
+            color: #fff;
+            padding: 13px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .empty-message {
+            padding: 30px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .error-message {
+            padding: 30px;
+            text-align: center;
+            color: #d33;
+        }
+
+        @media (max-width: 700px) {
+            .forms-page-hero {
+                padding: 32px 5%;
+            }
+
+            .forms-page-hero h1 {
+                font-size: 29px;
+            }
+
+            .forms-page-icon {
+                width: 65px;
+                height: 65px;
+                flex-basis: 65px;
+            }
+
+            .forms-page-icon svg {
+                width: 43px;
+                height: 43px;
+            }
+
+            .forms-contact {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .forms-contact a {
+                text-align: center;
+            }
+        }
     </style>
-
 </head>
-
 
 <body>
 
-    <h1>नए ऑनलाइन फॉर्म और अपडेट</h1>
+<!-- TOP BAR -->
+<div class="top-bar">
+
+    <div class="top-left">
+        <span>📞 8650515172</span>
+        <span class="separator">|</span>
+        <span>📍 Kasganj, Uttar Pradesh</span>
+    </div>
+
+    <a
+        href="https://wa.me/918650515172"
+        target="_blank"
+        class="top-whatsapp">
+
+        🟢 WhatsApp करें
+
+    </a>
+
+</div>
 
 
-    <div class="card">
+<!-- HEADER -->
+<header class="header">
+
+    <a href="index.html" class="logo">
+
+        <img
+            src="singh-logo-crop.png"
+            alt="Singh Photostat Logo">
+
+        <div class="logo-text">
+
+            <strong>SINGH</strong>
+
+            <small>
+                PHOTO STATE & JAN SEVA KENDRA
+            </small>
+
+        </div>
+
+    </a>
+
+
+    <nav class="navigation">
+
+        <a href="index.html">
+            होम
+        </a>
+
+        <a href="index.html#services">
+            सेवाएँ
+        </a>
+
+        <a href="online-forms.html" class="active">
+            नए फॉर्म
+        </a>
+
+        <a href="shop.html">
+            Online Shop
+        </a>
+
+        <a href="index.html#contact">
+            संपर्क
+        </a>
+
+    </nav>
+
+
+    <a
+        href="online-forms.html"
+        class="header-form-button">
+
+        📄 नए फॉर्म देखें
+
+    </a>
+
+</header>
+
+
+<!-- PAGE HERO -->
+<section class="forms-page-hero">
+
+    <div class="forms-page-icon">
+
+        <svg viewBox="0 0 64 64">
+
+            <rect
+                x="12"
+                y="7"
+                width="38"
+                height="50"
+                rx="3"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="4"/>
+
+            <path
+                d="M21 20h20M21 29h20M21 38h13"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="4"
+                stroke-linecap="round"/>
+
+            <path
+                d="M39 47l13-13"
+                stroke="currentColor"
+                stroke-width="5"
+                stroke-linecap="round"/>
+
+            <path
+                d="M37 53l2-7 7 5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="4"/>
+
+        </svg>
+
+    </div>
+
+
+    <div>
+
+        <h1>
+            नए ऑनलाइन फॉर्म और अपडेट
+        </h1>
 
         <p>
-            यहाँ उपलब्ध नए सरकारी फॉर्म,
-            उनकी अंतिम तारीख और फीस की जानकारी दी गई है।
+            यहाँ उपलब्ध नए सरकारी फॉर्म, उनकी अंतिम तारीख,
+            सरकारी फीस और हमारी सेवा फीस की जानकारी देखें।
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- FORMS LIST -->
+<main class="forms-page-wrap">
+
+    <div class="forms-page-heading">
+
+        <h2>
+            उपलब्ध ऑनलाइन फॉर्म
+        </h2>
+
+        <p>
+            यह सूची Admin Panel में जोड़े गए forms से
+            automatically update होती है।
         </p>
 
     </div>
 
 
-    <div class="card">
+    <div class="forms-table-wrap">
 
-        <h2>Available Forms</h2>
+        <div
+            id="formList">
 
-        <div id="formList">
-
-            <p>जानकारी लोड हो रही है...</p>
+            <p class="empty-message">
+                जानकारी लोड हो रही है...
+            </p>
 
         </div>
 
     </div>
 
 
+    <a
+        href="index.html#services"
+        class="forms-back">
 
+        ← सभी सेवाओं पर वापस जाएँ
+
+    </a>
+
+</main>
+
+
+<!-- CONTACT -->
+<section class="forms-contact">
+
+    <div>
+
+        <h2>
+            फॉर्म के लिए संपर्क करें
+        </h2>
+
+        <p>
+            किसी फॉर्म, फीस या आवेदन प्रक्रिया की जानकारी के लिए
+            WhatsApp पर संपर्क करें। मोबाइल: 8650515172
+        </p>
+
+    </div>
+
+
+    <a
+        href="https://wa.me/918650515172"
+        target="_blank">
+
+        🟢 WhatsApp करें →
+
+    </a>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+
+    <div class="footer-content">
+
+
+        <div class="footer-column brand-column">
+
+            <h3>
+                Singh Photostat &
+                <br>
+                Jan Seva Kendra
+            </h3>
+
+            <p>
+                आपकी सभी ऑनलाइन और डिजिटल सेवाओं
+                का भरोसेमंद केंद्र।
+            </p>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                त्वरित लिंक
+            </h4>
+
+            <a href="index.html">
+                होम
+            </a>
+
+            <a href="index.html#services">
+                सेवाएँ
+            </a>
+
+            <a href="online-forms.html">
+                नए फॉर्म
+            </a>
+
+            <a href="shop.html">
+                Online Shop
+            </a>
+
+            <a href="index.html#contact">
+                संपर्क
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                हमारी सेवाएँ
+            </h4>
+
+            <a href="online-forms.html">
+                ✓ ऑनलाइन फॉर्म
+            </a>
+
+            <a href="photo-printing.html">
+                ✓ फोटो और प्रिंटिंग
+            </a>
+
+            <a href="lamination-cards.html">
+                ✓ लैमिनेशन, कार्ड
+            </a>
+
+            <a href="jan-seva.html">
+                ✓ जन सेवा केंद्र
+            </a>
+
+            <a href="kisan-seva.html">
+                ✓ किसान सेवाएँ
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h4>
+                हमसे जुड़ें
+            </h4>
+
+            <p>
+                📞 8650515172
+            </p>
+
+            <p>
+                📍 Kasganj, Uttar Pradesh
+            </p>
+
+            <div class="social-icons">
+
+                <span>🟢</span>
+                <span>🔵</span>
+                <span>🟣</span>
+                <span>🔴</span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2025 Singh Photostat & Jan Seva Kendra.
+            All Rights Reserved.
+        </span>
+
+        <span>
+            Designed with ❤️ for better service
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- FIREBASE -->
 <script type="module">
-
 
 import { initializeApp }
 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
 import {
@@ -76,8 +603,8 @@ import {
 
 }
 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -103,7 +630,6 @@ const firebaseConfig = {
 };
 
 
-
 const app =
     initializeApp(firebaseConfig);
 
@@ -112,9 +638,7 @@ const db =
     getFirestore(app);
 
 
-
 async function loadForms() {
-
 
     const list =
         document.getElementById("formList");
@@ -122,22 +646,22 @@ async function loadForms() {
 
     try {
 
-
         const querySnapshot =
             await getDocs(
-
                 collection(
                     db,
                     "forms"
                 )
-
             );
 
 
         if (querySnapshot.empty) {
 
             list.innerHTML =
-                "<p>अभी कोई नया फॉर्म उपलब्ध नहीं है।</p>";
+
+                `<p class="empty-message">
+                    अभी कोई नया फॉर्म उपलब्ध नहीं है।
+                </p>`;
 
             return;
 
@@ -146,29 +670,47 @@ async function loadForms() {
 
         let html = `
 
-            <table class="service-table">
+            <div class="forms-table-scroll">
 
-                <thead>
+                <table class="forms-table">
 
-                    <tr>
+                    <thead>
 
-                        <th>Sr. No.</th>
+                        <tr>
 
-                        <th>Form Name</th>
+                            <th>
+                                Sr. No.
+                            </th>
 
-                        <th>Last Date</th>
+                            <th>
+                                Form Name
+                            </th>
 
-                        <th>Government Fee</th>
+                            <th>
+                                Last Date
+                            </th>
 
-                        <th>Service Fee</th>
+                            <th>
+                                Government Fee
+                            </th>
 
-                        <th>Remark</th>
+                            <th>
+                                Service Fee
+                            </th>
 
-                    </tr>
+                            <th>
+                                Remark
+                            </th>
 
-                </thead>
+                            <th>
+                                Action
+                            </th>
 
-                <tbody>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
 
         `;
 
@@ -180,35 +722,80 @@ async function loadForms() {
 
             function(documentSnapshot) {
 
-
                 const form =
                     documentSnapshot.data();
+
+
+                const formName =
+                    form.name || "-";
+
+
+                const whatsappMessage =
+                    encodeURIComponent(
+                        "मुझे " +
+                        formName +
+                        " के बारे में जानकारी चाहिए।"
+                    );
 
 
                 html += `
 
                     <tr>
 
-                        <td>${srNo}</td>
-
                         <td>
-                            ${form.name || "-"}
+                            ${srNo}
                         </td>
+
+
+                        <td class="form-name-cell">
+                            ${formName}
+                        </td>
+
 
                         <td>
                             ${form.date || "-"}
                         </td>
 
-                        <td>
+
+                        <td class="fee-cell">
                             ₹${form.govtFee || "-"}
                         </td>
 
-                        <td>
+
+                        <td class="fee-cell">
                             ₹${form.serviceFee || "-"}
                         </td>
 
-                        <td>
+
+                        <td class="remark-cell">
                             ${form.remark || "-"}
+                        </td>
+
+
+                        <td class="form-action-cell">
+
+                            <a
+                                href="https://wa.me/918650515172?text=${whatsappMessage}"
+                                target="_blank"
+                                class="apply-button">
+
+                                जानकारी / Apply
+
+                            </a>
+
+
+                            <br>
+
+
+                            <a
+                                href="https://wa.me/918650515172?text=${whatsappMessage}"
+                                target="_blank"
+                                class="whatsapp-form-button">
+
+                                🟢 WhatsApp
+
+                            </a>
+
                         </td>
 
                     </tr>
@@ -225,14 +812,17 @@ async function loadForms() {
 
         html += `
 
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
+
+            </div>
 
         `;
 
 
-        list.innerHTML = html;
+        list.innerHTML =
+            html;
 
 
     }
@@ -241,8 +831,12 @@ async function loadForms() {
 
         console.error(error);
 
+
         list.innerHTML =
-            "<p>फॉर्म की जानकारी लोड नहीं हो पाई।</p>";
+
+            `<p class="error-message">
+                फॉर्म की जानकारी लोड नहीं हो पाई।
+            </p>`;
 
     }
 
@@ -250,7 +844,6 @@ async function loadForms() {
 
 
 loadForms();
-
 
 </script>
 

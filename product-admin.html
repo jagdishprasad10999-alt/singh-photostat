@@ -4,50 +4,70 @@
 <head>
 <title>Product Admin - Singh Photostat</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+*{box-sizing:border-box}
+body{margin:0!important;font-family:Arial,"Noto Sans Devanagari",sans-serif!important;background:#f4f8fd!important;color:#163a70!important}
+.topbar{background:#062f6b;color:#fff;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:16px;box-shadow:0 3px 12px rgba(0,0,0,.15)}
+.brand{font-size:21px;font-weight:800}.brand span{color:#ff7a00}
+.topbar a{color:#fff;text-decoration:none;background:#ff7a00;padding:10px 16px;border-radius:8px;font-weight:700}
+.container{width:min(1180px,92%);margin:28px auto 50px}
+.hero{background:linear-gradient(135deg,#062f6b,#125ba8);color:#fff;border-radius:18px;padding:28px 30px;margin-bottom:24px;box-shadow:0 8px 24px rgba(4,45,104,.18)}
+.hero h1{margin:0 0 7px;font-size:30px}.hero p{margin:0;color:#eaf2ff}
+.layout{display:grid;grid-template-columns:350px 1fr;gap:24px;align-items:start}
+.panel{background:#fff;border:1px solid #dbe5f2;border-radius:16px;padding:23px;box-shadow:0 5px 18px rgba(20,55,100,.08)}
+.panel h2{margin:0 0 19px;color:#062f6b;font-size:21px}
+.form-group{margin-bottom:15px}
+label{display:block;font-weight:700;margin-bottom:7px;color:#28466f}
+input[type=text],input[type=number],input[type=file]{width:100%;padding:11px;border:1px solid #cbd8e8;border-radius:9px;font-size:14px;background:#fbfdff}
+input:focus{outline:none;border-color:#1769c2;box-shadow:0 0 0 3px rgba(23,105,194,.12)}
+button{border:0!important;border-radius:8px!important;padding:10px 14px!important;font-weight:700!important;cursor:pointer!important}
+.btn-save{width:100%;background:#ff7a00!important;color:#fff!important}
+.list-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:10px}
+.count{background:#e8f1ff;color:#0b4d9b;padding:7px 11px;border-radius:20px;font-weight:700;font-size:13px}
+#productList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.product-card{background:#fff;border:1px solid #dbe5f2;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(20,55,100,.07)}
+.product-image{height:175px;background:#f2f6fb;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.product-image img{width:100%;height:100%;object-fit:contain}
+.product-info{padding:15px}.product-info h3{margin:0 0 6px;color:#062f6b;font-size:18px}
+.product-info p{color:#687991;min-height:35px}.price{font-size:20px;font-weight:800;color:#16833f;margin:9px 0 12px}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:800;margin-bottom:10px}
+.badge.pin{background:#fff0d8;color:#d46c00}.badge.no-pin{background:#edf2f8;color:#66758b}
+.actions{display:flex;flex-wrap:wrap;gap:7px}.edit{background:#edf4ff!important;color:#0b4d9b!important}.delete{background:#d9363e!important;color:#fff!important}.pin{background:#0b57b7!important;color:#fff!important}.unpin{background:#159447!important;color:#fff!important}
+.empty,.loading{grid-column:1/-1;text-align:center;padding:40px 20px;color:#71819a;background:#fbfdff;border:2px dashed #cbd9ea;border-radius:14px}
+.footer{text-align:center;color:#7a899f;font-size:13px;margin-top:28px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}#productList{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.container{width:94%}.hero{padding:22px}.hero h1{font-size:25px}#productList{grid-template-columns:1fr}.topbar{padding:12px 4%}.brand{font-size:17px}}
+</style>
 </head>
 
 <body style="display:none;">
+<header class="topbar">
+  <div class="brand">Singh Photostat & <span>Jan Seva Kendra</span></div>
+  <a href="admin.html">← Admin Panel</a>
+</header>
+<main class="container">
+<section class="hero">
+  <h1>🛍️ Product Management</h1>
+  <p>Products जोड़ें, image देखें, edit/delete करें और Home Page पर अधिकतम 3 products pin करें।</p>
+</section>
+<div class="layout">
 
-<h1>Product Admin Panel</h1>
-
-<div class="card">
-
-<h3>नया Product जोड़ें</h3>
-
-<label>Product Name:</label>
-<br>
-<input type="text" id="productName">
-
-<br><br>
-
-<label>Price:</label>
-<br>
-<input type="text" id="productPrice">
-
-<br><br>
-
-<label>Description:</label>
-<br>
-<input type="text" id="productDescription">
-<br><br>
-
-<label>Product Image:</label>
-<br>
-<input type="file" id="productImage" accept="image/*">
-
-
-
-<br><br>
-
-<button onclick="saveProduct()">
-Save Product
-</button>
-<h2>Added Products</h2>
-
-<div id="productList"></div>
+<section class="panel">
+  <h2>➕ नया Product जोड़ें</h2>
+  <div class="form-group"><label for="productName">Product Name</label><input type="text" id="productName" placeholder="जैसे Pen Drive 32GB"></div>
+  <div class="form-group"><label for="productPrice">Price (₹)</label><input type="number" id="productPrice" min="0" placeholder="250"></div>
+  <div class="form-group"><label for="productDescription">Description</label><input type="text" id="productDescription" placeholder="High Speed"></div>
+  <div class="form-group"><label for="productImage">Product Image</label><input type="file" id="productImage" accept="image/*"></div>
+  <button class="btn-save" onclick="saveProduct()">💾 Save Product</button>
+</section>
+<section class="panel">
+  <div class="list-head"><h2 style="margin:0">📦 Added Products</h2><span class="count" id="productCount">0 Products</span></div>
+  <div id="productList"><div class="loading">Products loading...</div></div>
+</section>
 </div>
-
-
+<div class="footer">Singh Photostat & Jan Seva Kendra • Product Admin</div>
+</main>
 <script type="module">
 
 import { initializeApp }
@@ -281,64 +301,30 @@ async function showProducts() {
 
             list.innerHTML += `
 
-                <div class="card">
-
-                    <h3>${product.name}</h3>
-
-                    <p>
-                        Price: ₹${product.price}
-                    </p>
-
-                    <p>
-                        ${product.description}
-                    </p>
-
-                    ${
-                        product.image &&
-                        product.image !== "no-image"
-
-                        ?
-
-                        `<img
-                            src="${product.image}"
-                            width="150"
-                        >`
-
-                        :
-
-                        `<p>No image</p>`
-                    }
-
-
-                    <br><br>
-
-                    <button
-    onclick="editProduct('${id}')">
-    Edit
-</button>
-
-
-<button
-    onclick="deleteProduct('${id}')">
-    Delete
-</button>
-
-
-<br><br>
-
-
-<button
-    onclick="toggleProductPin('${id}', ${product.pinned === true})">
-
+                <article class="product-card">
+  <div class="product-image">
     ${
-        product.pinned === true
-        ? "📌 Pinned — Unpin"
-        : "📌 Pin to Home"
+      product.image && product.image !== "no-image"
+      ? `<img src="${product.image}" alt="${product.name}">`
+      : `<div>No Image</div>`
     }
-
-</button>
-
-                </div>
+  </div>
+  <div class="product-info">
+    <span class="badge ${product.pinned === true ? "pin" : "no-pin"}">
+      ${product.pinned === true ? "📌 Pinned to Home" : "Not Pinned"}
+    </span>
+    <h3>${product.name}</h3>
+    <p>${product.description}</p>
+    <div class="price">₹${product.price}</div>
+    <div class="actions">
+      <button class="edit" onclick="editProduct('${id}')">✏️ Edit</button>
+      <button class="delete" onclick="deleteProduct('${id}')">🗑️ Delete</button>
+      <button class="${product.pinned === true ? "unpin" : "pin"}" onclick="toggleProductPin('${id}', ${product.pinned === true})">
+        ${product.pinned === true ? "📌 Unpin" : "📌 Pin to Home"}
+      </button>
+    </div>
+  </div>
+</article>
 
             `;
 

@@ -1,84 +1,396 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 
 <head>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>जन सेवा केंद्र - Singh Photostat</title>
-
     <link rel="stylesheet" href="style.css">
 
     <style>
+        .service-page-hero {
+            background: linear-gradient(100deg, #fff0e5, #ffffff);
+            padding: 42px 6%;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            border-bottom: 1px solid #dfe7f2;
+        }
+
+        .service-page-icon {
+            width: 82px;
+            height: 82px;
+            flex: 0 0 82px;
+            border-radius: 18px;
+            background: #fff0e5;
+            color: #ed6908;
+            display: grid;
+            place-items: center;
+        }
+
+        .service-page-icon svg {
+            width: 54px;
+            height: 54px;
+        }
+
+        .service-page-hero h1 {
+            margin: 0 0 8px;
+            color: #092f70;
+            font-size: 38px;
+        }
+
+        .service-page-hero p {
+            margin: 0;
+            color: #526175;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .service-page-wrap {
+            width: 94%;
+            max-width: 1200px;
+            margin: 32px auto 45px;
+        }
+
+        .service-page-heading {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .service-page-heading h2 {
+            margin: 0 0 7px;
+            color: #092f70;
+            font-size: 28px;
+        }
+
+        .service-page-heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .service-table-wrap {
+            background: #fff;
+            border: 1px solid #dfe5ed;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,35,80,.08);
+        }
 
         .service-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .service-table th,
-        .service-table td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
         }
 
         .service-table th {
-            background: #f2f2f2;
+            background: #ed6908;
+            color: #fff;
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 13px;
         }
 
+        .service-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e7ebf1;
+            color: #34445b;
+            font-size: 13px;
+        }
+
+        .service-table tbody tr:hover {
+            background: #fff8f2;
+        }
+
+        .service-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .service-table td:first-child {
+            width: 85px;
+            text-align: center;
+            font-weight: 800;
+            color: #092f70;
+        }
+
+        .service-table td:nth-child(3) {
+            width: 150px;
+            font-weight: 800;
+            color: #092f70;
+        }
+
+        .service-table td:nth-child(4) {
+            color: #64748b;
+        }
+
+        .service-back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #0755ad;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .service-contact {
+            width: 94%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 22px 30px;
+            background: #062d68;
+            color: #fff;
+            border-radius: 11px 11px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .service-contact h2 {
+            margin: 0 0 5px;
+            color: #ff8a16;
+            font-size: 22px;
+        }
+
+        .service-contact p {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .service-contact a {
+            background: #1aaa42;
+            color: #fff;
+            padding: 13px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        @media (max-width: 700px) {
+            .service-page-hero {
+                padding: 32px 5%;
+            }
+
+            .service-page-hero h1 {
+                font-size: 29px;
+            }
+
+            .service-page-icon {
+                width: 65px;
+                height: 65px;
+                flex-basis: 65px;
+            }
+
+            .service-page-icon svg {
+                width: 43px;
+                height: 43px;
+            }
+
+            .service-table-wrap {
+                overflow-x: auto;
+            }
+
+            .service-table {
+                min-width: 650px;
+            }
+
+            .service-contact {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .service-contact a {
+                text-align: center;
+            }
+        }
     </style>
-
 </head>
-
 
 <body>
 
-    <h1>जन सेवा केंद्र</h1>
+<div class="top-bar">
+    <div class="top-left">
+        <span>📞 8650515172</span>
+        <span class="separator">|</span>
+        <span>📍 Kasganj, Uttar Pradesh</span>
+    </div>
 
+    <a href="https://wa.me/918650515172" target="_blank" class="top-whatsapp">
+        🟢 WhatsApp करें
+    </a>
+</div>
 
-    <div class="card">
+<header class="header">
 
-        <p>
-            जाति, निवास, आय प्रमाण पत्र और
-            अन्य सरकारी ऑनलाइन सेवाओं की सुविधा।
-        </p>
+    <a href="index.html" class="logo">
+        <img src="singh-logo-crop.png" alt="Singh Photostat Logo">
+
+        <div class="logo-text">
+            <strong>SINGH</strong>
+            <small>PHOTO STATE & JAN SEVA KENDRA</small>
+        </div>
+    </a>
+
+    <nav class="navigation">
+        <a href="index.html">होम</a>
+        <a href="index.html#services" class="active">सेवाएँ</a>
+        <a href="online-forms.html">नए फॉर्म</a>
+        <a href="shop.html">Online Shop</a>
+        <a href="index.html#contact">संपर्क</a>
+    </nav>
+
+    <a href="online-forms.html" class="header-form-button">
+        📄 नए फॉर्म देखें
+    </a>
+
+</header>
+
+<section class="service-page-hero">
+
+    <div class="service-page-icon">
+
+        <svg viewBox="0 0 64 64">
+
+            <path d="M8 24h48"
+                  stroke="currentColor"
+                  stroke-width="4"/>
+
+            <path d="M12 24l20-13 20 13"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="4"
+                  stroke-linejoin="round"/>
+
+            <path d="M15 28v24M26 28v24M38 28v24M49 28v24"
+                  stroke="currentColor"
+                  stroke-width="4"/>
+
+            <path d="M8 55h48"
+                  stroke="currentColor"
+                  stroke-width="5"
+                  stroke-linecap="round"/>
+
+        </svg>
 
     </div>
 
+    <div>
+        <h1>जन सेवा केंद्र</h1>
 
-    <div class="card">
+        <p>
+            जाति, निवास, आय प्रमाण पत्र और अन्य सरकारी
+            दस्तावेज़ एवं ऑनलाइन सेवाओं की जानकारी और फीस यहाँ देखें।
+        </p>
+    </div>
 
-        <h2>सेवा शुल्क</h2>
+</section>
+
+<main class="service-page-wrap">
+
+    <div class="service-page-heading">
+        <h2>जन सेवा केंद्र की सेवाएँ</h2>
+        <p>नीचे दी गई जानकारी Admin Panel से dynamic रूप से आती है।</p>
+    </div>
+
+    <div class="service-table-wrap">
 
         <div id="serviceList">
-
-            <p>जानकारी लोड हो रही है...</p>
-
+            <p style="padding:25px;text-align:center;color:#64748b;">
+                जानकारी लोड हो रही है...
+            </p>
         </div>
 
     </div>
 
+    <a href="index.html#services" class="service-back">
+        ← सभी सेवाओं पर वापस जाएँ
+    </a>
 
+</main>
+
+<section class="service-contact">
+
+    <div>
+        <h2>संपर्क करें</h2>
+
+        <p>
+            किसी सेवा या शुल्क की जानकारी के लिए WhatsApp पर संपर्क करें।
+            मोबाइल: 8650515172
+        </p>
+    </div>
+
+    <a href="https://wa.me/918650515172" target="_blank">
+        🟢 WhatsApp करें →
+    </a>
+
+</section>
+
+<footer>
+
+    <div class="footer-content">
+
+        <div class="footer-column brand-column">
+            <h3>
+                Singh Photostat &
+                <br>
+                Jan Seva Kendra
+            </h3>
+
+            <p>
+                आपकी सभी ऑनलाइन और डिजिटल सेवाओं का भरोसेमंद केंद्र।
+            </p>
+        </div>
+
+        <div class="footer-column">
+            <h4>त्वरित लिंक</h4>
+            <a href="index.html">होम</a>
+            <a href="index.html#services">सेवाएँ</a>
+            <a href="online-forms.html">नए फॉर्म</a>
+            <a href="shop.html">Online Shop</a>
+            <a href="index.html#contact">संपर्क</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>हमारी सेवाएँ</h4>
+            <a href="online-forms.html">✓ ऑनलाइन फॉर्म</a>
+            <a href="photo-printing.html">✓ फोटो और प्रिंटिंग</a>
+            <a href="lamination-cards.html">✓ लैमिनेशन, कार्ड</a>
+            <a href="jan-seva.html">✓ जन सेवा केंद्र</a>
+            <a href="kisan-seva.html">✓ किसान सेवाएँ</a>
+        </div>
+
+        <div class="footer-column">
+            <h4>हमसे जुड़ें</h4>
+            <p>📞 8650515172</p>
+            <p>📍 Kasganj, Uttar Pradesh</p>
+
+            <div class="social-icons">
+                <span>🟢</span>
+                <span>🔵</span>
+                <span>🟣</span>
+                <span>🔴</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <span>© 2025 Singh Photostat & Jan Seva Kendra. All Rights Reserved.</span>
+        <span>Designed with ❤️ for better service</span>
+    </div>
+
+</footer>
 
 <script type="module">
 
-
 import { initializeApp }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-
 import {
-
     getFirestore,
     collection,
     getDocs
-
 }
-
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
 
 const firebaseConfig = {
 
@@ -99,157 +411,102 @@ const firebaseConfig = {
 
     appId:
         "1:366679751413:web:e8fa0ce97cca7ddfefa3bc"
-
 };
 
-
-
-const app =
-    initializeApp(firebaseConfig);
-
-
-const db =
-    getFirestore(app);
-
-
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 async function loadServiceItems() {
-
 
     const list =
         document.getElementById("serviceList");
 
-
     try {
-
 
         const querySnapshot =
             await getDocs(
-
                 collection(
                     db,
                     "services",
                     "janSeva",
                     "items"
                 )
-
             );
-
 
         if (querySnapshot.empty) {
 
             list.innerHTML =
-                "<p>अभी कोई सेवा उपलब्ध नहीं है।</p>";
+                `<p style="padding:25px;text-align:center;color:#64748b;">
+                    अभी कोई सेवा उपलब्ध नहीं है।
+                </p>`;
 
             return;
-
         }
-
 
         let html = `
 
             <table class="service-table">
 
                 <thead>
-
                     <tr>
-
                         <th>Sr. No.</th>
-
                         <th>Description</th>
-
                         <th>Price</th>
-
                         <th>Remark</th>
-
                     </tr>
-
                 </thead>
 
                 <tbody>
-
         `;
-
 
         let srNo = 1;
 
-
         querySnapshot.forEach(
-
             function(documentSnapshot) {
-
 
                 const item =
                     documentSnapshot.data();
-
 
                 html += `
 
                     <tr>
 
-                        <td>
-                            ${srNo}
-                        </td>
+                        <td>${srNo}</td>
 
-                        <td>
-                            ${item.description || "-"}
-                        </td>
+                        <td>${item.description || "-"}</td>
 
-                        <td>
-                            ₹${item.price || "-"}
-                        </td>
+                        <td>₹${item.price || "-"}</td>
 
-                        <td>
-                            ${item.remark || "-"}
-                        </td>
+                        <td>${item.remark || "-"}</td>
 
                     </tr>
-
                 `;
 
-
                 srNo++;
-
             }
-
         );
 
-
         html += `
-
                 </tbody>
-
             </table>
-
         `;
-
 
         list.innerHTML = html;
 
-
-    }
-
-    catch(error) {
-
+    } catch(error) {
 
         console.error(error);
 
-
         list.innerHTML =
-            "<p>सेवा की जानकारी लोड नहीं हो पाई।</p>";
-
-
+            `<p style="padding:25px;text-align:center;color:#d33;">
+                सेवा की जानकारी लोड नहीं हो पाई।
+            </p>`;
     }
-
 }
-
 
 loadServiceItems();
 
-
 </script>
 
-
 </body>
-
 </html>
