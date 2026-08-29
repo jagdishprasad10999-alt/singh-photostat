@@ -20,10 +20,35 @@
 @media(max-width:600px){.form-card{grid-template-columns:1fr 1fr!important}.form-card .form-actions{grid-column:1/-1!important;flex-direction:column!important}}
 </style>
 
+<style>
+.since-2011 {
+    position: absolute;
+    top: 8px;
+    right: 18px;
+    z-index: 1000;
+    color: #0b57b7;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: .4px;
+    line-height: 1;
+    background: #ffffff;
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+    .since-2011 {
+        top: 6px;
+        right: 10px;
+        font-size: 12px;
+    }
+}
+</style>
+
 </head>
 
 <body>
-
+<div class="since-2011">Since 2011</div>
 <!-- ================= TOP BAR ================= -->
 
 <div class="top-bar">
@@ -118,7 +143,7 @@
 
             <span>Jan Seva Kendra </span>
              
-            <span> @since 2011 </span>
+            
 
         </h1>
 

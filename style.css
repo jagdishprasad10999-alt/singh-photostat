@@ -196,6 +196,10 @@ body {
 }
 
 
+.navigation {
+    margin-left: 80px;
+}
+
 .header-form-button {
 
     background: #0755ad;
