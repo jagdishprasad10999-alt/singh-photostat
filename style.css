@@ -158,15 +158,13 @@ body {
 
 }
 
-
 .navigation {
-
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
-
     align-items: center;
-
     gap: 5px;
-
 }
 
 
@@ -196,9 +194,7 @@ body {
 }
 
 
-.navigation {
-    margin-left: 80px;
-}
+
 
 .header-form-button {
 
@@ -1555,4 +1551,42 @@ footer {
 
 .location-link:hover {
     color: #ff7a00;
+}
+
+/* ================= FOOTER UPDATE ================= */
+
+.footer-column h4 {
+    margin-bottom: 12px;
+}
+
+.footer-column p {
+    line-height: 1.7;
+}
+
+.footer-column a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer-column a:hover {
+    text-decoration: underline;
+}
+
+.footer-since {
+    color: #0b57b7;
+    font-weight: 800;
+    font-size: 16px;
+    margin-top: 12px;
+}
+
+.footer-sub-heading {
+    margin-top: 18px;
+    margin-bottom: 6px !important;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 20px;
 }
