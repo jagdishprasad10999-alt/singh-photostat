@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://singhonlinecentre.in/sitemap.xml
