@@ -52,7 +52,7 @@
     <!-- THREE LINE MENU -->
 <div class="menu-wrapper">
 
-    <button class="menu-button" onclick="toggleMenu()">
+    <button class="menu-button" id="menuButton">
         ☰
     </button>
 
@@ -1362,22 +1362,28 @@ ${
 
 loadForms();
 
-window.toggleMenu = function() {
-    const menu = document.getElementById("sideMenu");
-    menu.classList.toggle("show");
-};
+const menu = document.getElementById("sideMenu");
+const menuButton = document.getElementById("menuButton");
+
+menuButton.addEventListener("click", function(event) {
+
+    event.stopPropagation();
+
+    if (menu.style.display === "block") {
+        menu.style.display = "none";
+    } else {
+        menu.style.display = "block";
+    }
+
+});
 
 document.addEventListener("click", function(event) {
 
-    const menu = document.getElementById("sideMenu");
-    const button = document.querySelector(".menu-button");
-
     if (
-        menu.classList.contains("show") &&
         !menu.contains(event.target) &&
-        !button.contains(event.target)
+        !menuButton.contains(event.target)
     ) {
-        menu.classList.remove("show");
+        menu.style.display = "none";
     }
 
 });
