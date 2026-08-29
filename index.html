@@ -1362,10 +1362,10 @@ ${
 
 loadForms();
 
-function toggleMenu() {
+window.toggleMenu = function() {
     const menu = document.getElementById("sideMenu");
     menu.classList.toggle("show");
-}
+};
 
 document.addEventListener("click", function(event) {
 
