@@ -48,6 +48,32 @@
 </head>
 
 <body>
+
+    <!-- THREE LINE MENU -->
+<div class="menu-wrapper">
+
+    <button class="menu-button" onclick="toggleMenu()">
+        ☰
+    </button>
+
+    <div class="side-menu" id="sideMenu">
+
+        <a href="index.html">🏠 Home</a>
+
+        <a href="#services">📄 हमारी सेवाएँ</a>
+
+        <a href="online-forms.html">📝 नए ऑनलाइन फॉर्म</a>
+
+        <a href="shop.html">🛍️ Online Shop</a>
+
+        <a href="#about">ℹ️ हमारे बारे में</a>
+
+        <a href="#contact">📞 संपर्क करें</a>
+
+    </div>
+
+</div>
+
 <div class="since-2011">Since 2011</div>
 <!-- ================= TOP BAR ================= -->
 
@@ -673,7 +699,43 @@
 
 </section>
 
+<!-- ================= ABOUT US ================= -->
 
+<section id="about" class="about-section">
+
+    <div class="section-heading">
+        <span></span>
+
+        <h2>हमारे बारे में</h2>
+
+        <span></span>
+    </div>
+
+    <div class="about-content">
+
+        <h3>Singh Photostat & Jan Seva Kendra</h3>
+
+        <p>
+            Singh Photostat & Jan Seva Kendra
+            वर्ष 2011 से अपने क्षेत्र के लोगों को
+            ऑनलाइन एवं डिजिटल सेवाएँ प्रदान कर रहा है।
+        </p>
+
+        <p>
+            यहाँ आपको ऑनलाइन फॉर्म, सरकारी सेवाएँ,
+            फोटो एवं प्रिंटिंग, स्कैनिंग, लैमिनेशन,
+            किसान सेवाएँ और अन्य डिजिटल सेवाओं की
+            सुविधा एक ही स्थान पर मिलती है।
+        </p>
+
+        <p>
+            हमारा उद्देश्य सरल, सुविधाजनक और
+            भरोसेमंद सेवा प्रदान करना है।
+        </p>
+
+    </div>
+
+</section>
 
 <!-- ================= CONTACT ================= -->
 
@@ -1299,6 +1361,26 @@ ${
 
 
 loadForms();
+
+function toggleMenu() {
+    const menu = document.getElementById("sideMenu");
+    menu.classList.toggle("show");
+}
+
+document.addEventListener("click", function(event) {
+
+    const menu = document.getElementById("sideMenu");
+    const button = document.querySelector(".menu-button");
+
+    if (
+        menu.classList.contains("show") &&
+        !menu.contains(event.target) &&
+        !button.contains(event.target)
+    ) {
+        menu.classList.remove("show");
+    }
+
+});
 
 </script>
 
