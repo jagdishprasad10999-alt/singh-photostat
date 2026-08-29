@@ -1721,3 +1721,44 @@ footer {
     }
 
 }
+/* Mobile Header Fix */
+@media (max-width: 768px) {
+
+    .header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+        min-height: 70px;
+    }
+
+    .header .logo {
+        display: flex;
+        align-items: center;
+        max-width: calc(100% - 70px);
+    }
+
+    .header .logo img {
+        max-width: 45px;
+        height: auto;
+    }
+
+    .header .logo-text {
+        margin-left: 8px;
+    }
+
+    .header .logo-text strong {
+        font-size: 28px;
+    }
+
+    .header .logo-text small {
+        font-size: 9px;
+    }
+
+    /* Desktop navigation mobile पर छिपेगी */
+    .header .navigation {
+        display: none;
+    }
+
+}
