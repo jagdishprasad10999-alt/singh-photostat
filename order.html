@@ -170,7 +170,7 @@ const deliveryCharge =
     const quantity = Number(document.getElementById("quantity").value) || 1;
 
     const total = (price * quantity) + deliveryCharge;
-
+    document.getElementById("deliveryCharge").innerText = deliveryCharge;
     document.getElementById("totalPrice").innerText = total;
 }
 
