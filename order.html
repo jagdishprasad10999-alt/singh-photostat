@@ -68,8 +68,13 @@ body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f4
 <div class="info-value" id="productName">-</div>
 </div>
 <div class="info-box">
-<label>Price</label>
-<div class="info-value">₹<span id="productPrice">0</span></div>
+    <label>Product Price</label>
+    <div class="info-value">₹<span id="productPrice">0</span></div>
+</div>
+
+<div class="info-box">
+    <label>Delivery Charge</label>
+    <div class="info-value">₹<span id="deliveryCharge">0</span></div>
 </div>
 </div>
 <h2 class="section-title"><span class="section-icon">👤</span>Customer Details</h2>
@@ -112,10 +117,11 @@ const params = new URLSearchParams(window.location.search);
 
 const product = params.get("product");
 const price = params.get("price");
+const deliveryCharge = params.get("delivery") || "0";
 
 document.getElementById("productName").innerText = product || "-";
 document.getElementById("productPrice").innerText = price || "0";
-
+document.getElementById("deliveryCharge").innerText = deliveryCharge;
 calculateTotal();
 loadProductImage();
 
@@ -150,8 +156,10 @@ async function loadProductImage(){
 
 function calculateTotal(){
     const price = Number(document.getElementById("productPrice").innerText) || 0;
+    const deliveryCharge = Number(document.getElementById("deliveryCharge").innerText) || 0;
     const quantity = Number(document.getElementById("quantity").value) || 1;
-    const total = price * quantity;
+
+    const total = (price * quantity) + deliveryCharge;
 
     document.getElementById("totalPrice").innerText = total;
 }
@@ -164,6 +172,7 @@ window.placeOrder = function(){
     const mobile = document.getElementById("customerMobile").value.trim();
     const product = document.getElementById("productName").innerText;
     const price = document.getElementById("productPrice").innerText;
+    const deliveryCharge = document.getElementById("deliveryCharge").innerText;
     const quantity = document.getElementById("quantity").value;
     const total = document.getElementById("totalPrice").innerText;
 
@@ -177,7 +186,8 @@ window.placeOrder = function(){
         "नाम: " + encodeURIComponent(name) + "%0A" +
         "मोबाइल: " + encodeURIComponent(mobile) + "%0A" +
         "Product: " + encodeURIComponent(product) + "%0A" +
-        "Price: ₹" + encodeURIComponent(price) + "%0A" +
+        "Product Price: ₹" + encodeURIComponent(price) + "%0A" +
+        "Delivery Charge: ₹" + encodeURIComponent(deliveryCharge) + "%0A" +
         "Quantity: " + encodeURIComponent(quantity) + "%0A" +
         "Total: ₹" + encodeURIComponent(total);
 

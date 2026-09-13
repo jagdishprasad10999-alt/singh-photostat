@@ -206,6 +206,8 @@ async function loadProducts() {
             const product =
                 documentSnapshot.data();
 
+            const deliveryCharge = Number(product.deliveryCharge || 0);
+
 
             const productCard = document.createElement("div");
 
@@ -224,11 +226,19 @@ async function loadProducts() {
         <h3>${product.name}</h3>
         <p class="product-description">${product.description || ""}</p>
         <div class="product-bottom">
-            <div class="product-price">₹${product.price}</div>
+            <div>
+    <div class="product-price">Product Price: ₹${product.price}</div>
+    <div style="font-size:13px;color:#66768c;margin-top:4px;">
+        Delivery Charge: ₹${deliveryCharge}
+    </div>
+    <div style="font-size:15px;font-weight:800;color:#062f6b;margin-top:4px;">
+        Total: ₹${Number(product.price) + deliveryCharge}
+    </div>
+</div>
             <a class="order-btn"
-               href="order.html?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}">
-               🛒 Order Now
-            </a>
+   href="order.html?product=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}&delivery=${encodeURIComponent(deliveryCharge)}&total=${encodeURIComponent(Number(product.price) + deliveryCharge)}">
+   🛒 Order Now
+</a>
         </div>
     </div>
 `;
