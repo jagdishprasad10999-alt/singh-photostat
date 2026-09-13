@@ -82,7 +82,13 @@ body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f4
 <div class="form-group"><label for="customerName">आपका नाम *</label><input type="text" id="customerName" placeholder="अपना पूरा नाम लिखें"></div>
 <div class="form-group"><label for="customerMobile">मोबाइल नंबर *</label><input type="tel" id="customerMobile" placeholder="10 अंकों का मोबाइल नंबर"></div>
 <div class="form-group"><label for="quantity">Quantity</label><input type="number" id="quantity" value="1" min="1" onchange="calculateTotal()"></div>
-<div class="form-group"><label>Order Type</label><input type="text" value="WhatsApp Order" readonly></div>
+<div class="form-group">
+    <label for="orderType">Order Type</label>
+    <select id="orderType" onchange="calculateTotal()">
+        <option value="delivery">🚚 Home Delivery</option>
+        <option value="pickup">🏪 Shop Pickup</option>
+    </select>
+</div>
 </div>
 <div class="total-box"><span>कुल अनुमानित राशि</span><strong>₹<span id="totalPrice">0</span></strong></div>
 <button class="whatsapp-btn" onclick="placeOrder()">🟢 WhatsApp पर Order करें</button>
@@ -118,6 +124,7 @@ const params = new URLSearchParams(window.location.search);
 const product = params.get("product");
 const price = params.get("price");
 const deliveryCharge = params.get("delivery") || "0";
+const originalDeliveryCharge = Number(deliveryCharge);
 
 document.getElementById("productName").innerText = product || "-";
 document.getElementById("productPrice").innerText = price || "0";
@@ -156,7 +163,10 @@ async function loadProductImage(){
 
 function calculateTotal(){
     const price = Number(document.getElementById("productPrice").innerText) || 0;
-    const deliveryCharge = Number(document.getElementById("deliveryCharge").innerText) || 0;
+const deliveryCharge =
+    document.getElementById("orderType").value === "pickup"
+    ? 0
+    : originalDeliveryCharge;
     const quantity = Number(document.getElementById("quantity").value) || 1;
 
     const total = (price * quantity) + deliveryCharge;
@@ -172,9 +182,13 @@ window.placeOrder = function(){
     const mobile = document.getElementById("customerMobile").value.trim();
     const product = document.getElementById("productName").innerText;
     const price = document.getElementById("productPrice").innerText;
-    const deliveryCharge = document.getElementById("deliveryCharge").innerText;
+    const deliveryCharge =
+    document.getElementById("orderType").value === "pickup"
+    ? 0
+    : originalDeliveryCharge;
     const quantity = document.getElementById("quantity").value;
     const total = document.getElementById("totalPrice").innerText;
+    const orderType = document.getElementById("orderType").value;
 
     if(name === "" || mobile === ""){
         alert("कृपया अपना नाम और मोबाइल नंबर भरें।");
@@ -188,6 +202,9 @@ window.placeOrder = function(){
         "Product: " + encodeURIComponent(product) + "%0A" +
         "Product Price: ₹" + encodeURIComponent(price) + "%0A" +
         "Delivery Charge: ₹" + encodeURIComponent(deliveryCharge) + "%0A" +
+        "Order Type: " + encodeURIComponent(
+          orderType === "pickup" ? "Shop Pickup" : "Home Delivery"
+          ) + "%0A" +
         "Quantity: " + encodeURIComponent(quantity) + "%0A" +
         "Total: ₹" + encodeURIComponent(total);
 
